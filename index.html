@@ -1,0 +1,892 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXUS — Explore le monde</title>
+
+<style>
+:root{
+ --fond:#10101a;--surface:#191927;--surface2:#292536;
+ --texte:#f4f0eb;--secondaire:#aaa6b7;
+ --violet:#a78bfa;--rose:#d68bdc;
+ --beige:#d6c3a5;--beige-clair:#eadcc7;
+ --beige-fond:rgba(214,195,165,.12);
+ --bordure:rgba(214,195,165,.28);
+}
+body.light{
+ --fond:#f4f0e9;--surface:#fffdf9;--surface2:#eee8df;
+ --texte:#292633;--secondaire:#77717b;
+ --violet:#7954bb;--rose:#a45ca8;
+ --beige:#b69a70;--beige-clair:#d6c3a5;
+ --beige-fond:rgba(182,154,112,.13);
+ --bordure:rgba(182,154,112,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+ background:var(--fond);color:var(--texte);
+ font-family:Arial,sans-serif;min-height:100vh;transition:.25s
+}
+header{
+ display:flex;justify-content:space-between;align-items:center;
+ padding:17px 6%;border-bottom:2px solid var(--beige);
+ position:sticky;top:0;background:var(--fond);z-index:10;gap:15px
+}
+.logo{font-size:27px;font-weight:900;letter-spacing:2px}
+.logo span{color:var(--beige)}
+nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{
+ border:1px solid var(--beige);background:var(--surface2);
+ color:var(--texte);padding:10px 14px;border-radius:10px;
+ cursor:pointer;font-weight:600;transition:.2s
+}
+button:hover{border-color:var(--beige-clair);background:var(--beige-fond);transform:translateY(-2px)}
+button:disabled{opacity:.65;cursor:default;transform:none}
+button.primary{
+ background:linear-gradient(120deg,#a78bfa,#d6c3a5);
+ color:#17131d;border:none
+}
+input,select{
+ min-width:0;padding:13px;border-radius:10px;
+ border:1px solid var(--beige);background:var(--surface);
+ color:var(--texte);font-size:15px
+}
+main{max-width:1250px;margin:auto;padding:35px 5%}
+.hero{
+ text-align:center;padding:55px 15px 35px;
+ background:linear-gradient(135deg,rgba(214,195,165,.12),rgba(167,139,250,.08));
+ border:1px solid var(--beige);border-radius:24px;margin-bottom:25px
+}
+.eyebrow{color:var(--beige);letter-spacing:3px;font-size:12px;font-weight:bold}
+h1{font-size:clamp(34px,6vw,60px);margin:17px 0}
+h1 span{color:var(--beige)}
+.hero p{color:var(--secondaire);line-height:1.7}
+.search{display:flex;gap:10px;max-width:650px;margin:25px auto}
+.search input{flex:1}
+.section-title{
+ font-size:24px;margin:35px 0 20px;border-left:5px solid var(--beige);
+ padding:8px 14px;background:var(--beige-fond);border-radius:0 10px 10px 0
+}
+.universes,.cards,.stats-grid,.badges,.missions,.profile-grid{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px
+}
+.universe,.card,.panel,.stat-card,.badge-card,.mission,.profile-card{
+ background:var(--surface);border:1px solid var(--bordure);
+ border-radius:16px;padding:20px
+}
+.universe{cursor:pointer;transition:.2s}
+.universe:hover,.card:hover{transform:translateY(-4px);border-color:var(--beige)}
+.universe .emoji{font-size:32px}
+.universe h3{margin:12px 0 7px}
+.universe p,.card p,.muted{font-size:14px;color:var(--secondaire);line-height:1.6}
+.card{display:flex;flex-direction:column;min-height:220px}
+.card .category{font-size:11px;color:var(--beige);letter-spacing:1px}
+.card h3{margin:12px 0}
+.card p{flex:1}
+.card-actions{display:flex;gap:8px;margin-top:15px}
+.card-actions button{flex:1}
+.heart{max-width:48px;color:var(--rose);font-size:19px}
+.content-head{
+ display:flex;justify-content:space-between;align-items:center;
+ flex-wrap:wrap;gap:12px;margin-bottom:20px
+}
+.content-head h2{border-left:5px solid var(--beige);padding-left:12px}
+.article{
+ max-width:850px;margin:auto;background:var(--surface);
+ border:2px solid var(--beige);padding:30px;border-radius:18px
+}
+.article h2{font-size:30px;margin:15px 0}
+.article p{color:var(--secondaire);line-height:1.8;margin:15px 0}
+.article-text{color:var(--texte);font-size:16px;line-height:1.9;margin-top:20px}
+.article-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.pill{
+ display:inline-block;padding:7px 11px;border:1px solid var(--bordure);
+ border-radius:20px;color:var(--beige);font-size:12px
+}
+.hidden{display:none!important}
+.empty{text-align:center;color:var(--secondaire);padding:40px}
+.panel{margin-top:22px}
+.panel h2,.panel h3{color:var(--beige);margin-bottom:12px}
+.progress-top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.level-number{font-size:38px;font-weight:bold;color:var(--beige)}
+.xp-bar{height:15px;background:var(--surface2);border-radius:20px;overflow:hidden;margin:15px 0}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--rose),var(--beige));transition:width .4s}
+.stat-card{text-align:center}
+.stat-card strong{display:block;font-size:27px;color:var(--beige);margin-bottom:7px}
+.badge-card{text-align:center}
+.badge-card .badge-icon{font-size:32px;margin-bottom:8px}
+.badge-card p{font-size:12px;color:var(--secondaire);margin-top:7px}
+.badge-card.locked{opacity:.4;filter:grayscale(1)}
+.mission{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.mission.done{border-color:#54bd83}
+.mission small{color:var(--secondaire)}
+.profile-card{text-align:center}
+.avatar{font-size:65px;margin-bottom:10px}
+.profile-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.profile-form input{flex:1}
+.map-line{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:15px}
+.map-node{
+ flex:1;min-width:130px;padding:15px;background:var(--surface2);
+ border:1px solid var(--beige);border-radius:13px;text-align:center
+}
+.map-node strong{display:block;margin:7px 0}
+.quiz-question{font-size:21px;font-weight:bold;margin:20px 0}
+.quiz-options{display:grid;gap:10px}
+.quiz-options button{text-align:left;padding:14px}
+.correct{border-color:#54bd83!important;background:rgba(84,189,131,.15)!important}
+.wrong{border-color:#df7777!important;background:rgba(223,119,119,.15)!important}
+.quiz-result{margin-top:15px;padding:18px;background:var(--surface2);border-radius:12px}
+footer{text-align:center;padding:35px;color:var(--secondaire);font-size:13px;border-top:1px solid var(--beige);margin-top:30px}
+@media(max-width:650px){
+ header{padding:15px 4%;align-items:flex-start;flex-direction:column}
+ main{padding:25px 4%}
+ .search{flex-direction:column}
+ .article{padding:22px}
+ nav button{padding:9px}
+}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="logo">NEXUS<span>.</span></div>
+ <nav>
+  <button onclick="accueil()">Accueil</button>
+  <button onclick="afficherProfil()">👤 Profil</button>
+  <button onclick="afficherFavoris()">♡ Favoris</button>
+  <button onclick="afficherExploration()">🗺️ Explorer</button>
+  <button onclick="afficherProgression()">🏆 Progression</button>
+  <button onclick="changerTheme()" id="themeButton">☀️</button>
+ </nav>
+</header>
+
+<main>
+<section id="home">
+ <div class="hero">
+  <div class="eyebrow">APPRENDS • EXPLORE • DÉCOUVRE</div>
+  <h1>Explore le monde avec <span>NEXUS.</span></h1>
+  <p>500 découvertes, des quiz, des missions et des récompenses pour nourrir ta curiosité.</p>
+  <div class="search">
+   <input id="recherche" placeholder="Rechercher une découverte..." onkeydown="if(event.key==='Enter')rechercher()">
+   <button class="primary" onclick="rechercher()">Rechercher</button>
+  </div>
+  <button onclick="decouverteAleatoire()">🎲 Découverte aléatoire</button>
+ </div>
+
+ <div id="miniProgression"></div>
+ <h2 class="section-title">🌍 Explore les univers</h2>
+ <div class="universes" id="universes"></div>
+
+ <h2 class="section-title">🗺️ Carte d'exploration</h2>
+ <div class="panel">
+  <p class="muted">Parcours les cinq univers et complète ta collection de découvertes.</p>
+  <div id="carteExploration" class="map-line"></div>
+ </div>
+
+ <section class="panel">
+  <h2>🧠 Le coin des défis</h2>
+  <p class="muted">Teste tes connaissances avec des questions sur les cinq univers.</p>
+  <div class="card-actions">
+   <button class="primary" onclick="demarrerQuiz()">🎮 Commencer un quiz</button>
+   <button onclick="afficherQuestionDuJour()">📅 Question du jour</button>
+  </div>
+  <div id="quizZoneResultat"></div>
+ </section>
+</section>
+
+<section id="contenu" class="hidden"></section>
+</main>
+
+<footer>NEXUS © 2026 — Le savoir n'a pas de limites.</footer>
+
+<script>
+/* =========================
+   UNIVERS ET DÉCOUVERTES
+========================= */
+
+const themes=[
+ {id:"espace",nom:"Espace",emoji:"🚀",description:"Planètes, étoiles et galaxies"},
+ {id:"technologie",nom:"Technologie",emoji:"💻",description:"Inventions et innovations"},
+ {id:"science",nom:"Science",emoji:"🔬",description:"Le monde expliqué"},
+ {id:"mysteres",nom:"Mystères",emoji:"🌌",description:"Énigmes et phénomènes étonnants"},
+ {id:"gaming",nom:"Gaming",emoji:"🎮",description:"Jeux vidéo et univers virtuels"}
+];
+
+const sujets={
+espace:[
+["Le Soleil","L'étoile au centre de notre système solaire.","Le Soleil est une immense boule de gaz très chaud. Il fournit la lumière et l'énergie qui rendent la vie possible sur Terre."],
+["Mercure","La planète la plus proche du Soleil.","Mercure est une petite planète rocheuse couverte de cratères. Elle connaît de grands écarts de température entre le jour et la nuit."],
+["Vénus","Une planète enveloppée de nuages.","Vénus possède une atmosphère très dense. Son puissant effet de serre en fait la planète la plus chaude du système solaire."],
+["La Terre","Notre planète bleue.","La Terre est la seule planète connue à abriter la vie. Son eau liquide et son atmosphère contribuent à rendre cet environnement habitable."],
+["Mars","La planète rouge.","Mars doit sa couleur à l'oxyde de fer présent dans son sol. Des robots explorent sa surface pour comprendre son passé."],
+["Jupiter","La géante gazeuse.","Jupiter est la plus grande planète du système solaire. Elle possède de nombreuses lunes et une gigantesque tempête appelée la Grande Tache rouge."],
+["Saturne","La planète aux anneaux.","Saturne est célèbre pour ses anneaux composés surtout de glace et de roches."],
+["Uranus","Une planète inclinée.","Uranus tourne presque couchée sur le côté, ce qui entraîne des saisons très longues."],
+["Neptune","Le monde des vents puissants.","Neptune est une planète lointaine et glacée où des vents extrêmement rapides parcourent l'atmosphère."],
+["Pluton","Une planète naine célèbre.","Pluton se trouve dans la ceinture de Kuiper. Depuis 2006, elle est classée comme planète naine."],
+["La Lune","Le satellite naturel de la Terre.","La Lune influence les marées terrestres et présente presque toujours la même face à notre planète."],
+["Les éclipses","Quand un astre en cache un autre.","Une éclipse se produit lorsque plusieurs astres s'alignent. Elle peut concerner le Soleil ou la Lune."],
+["Les étoiles","Des soleils très lointains.","Les étoiles sont des sphères de plasma qui produisent de l'énergie grâce à la fusion nucléaire dans leur cœur."],
+["Les constellations","Des dessins dans le ciel.","Les constellations sont des régions du ciel auxquelles les humains ont associé des formes."],
+["La Voie lactée","Notre galaxie.","La Voie lactée est une galaxie spirale contenant des centaines de milliards d'étoiles."],
+["Les trous noirs","Des objets à la gravité extrême.","Un trou noir est une région de l'espace où la gravité est si forte que rien ne peut s'en échapper au-delà de l'horizon des événements."],
+["Les supernovas","La fin spectaculaire de certaines étoiles.","Une supernova est une explosion stellaire extrêmement puissante qui disperse des éléments dans l'espace."],
+["Les nébuleuses","Des nuages cosmiques.","Les nébuleuses sont des nuages de gaz et de poussière. Certaines sont des lieux où de nouvelles étoiles se forment."],
+["Les comètes","Des voyageuses glacées.","Les comètes sont composées de glace, de poussière et de roches. Près du Soleil, elles développent souvent une queue."],
+["Les astéroïdes","Des roches spatiales.","Les astéroïdes sont de petits corps rocheux qui orbitent autour du Soleil."],
+["Les exoplanètes","Des mondes autour d'autres étoiles.","Une exoplanète est une planète située en dehors de notre système solaire. Les astronomes en ont découvert des milliers."],
+["Les aurores polaires","Des lumières dans le ciel.","Les aurores apparaissent lorsque des particules chargées interagissent avec l'atmosphère et le champ magnétique."],
+["Les satellites artificiels","Des machines en orbite.","Les satellites servent aux communications, à la météo, à la navigation et à l'observation de la Terre."],
+["La Station spatiale internationale","Un laboratoire orbital.","La Station spatiale internationale est un laboratoire habité où des astronautes réalisent des expériences en microgravité."],
+["Les fusées","Des véhicules pour quitter la Terre.","Les fusées utilisent la propulsion pour accélérer et transporter des charges dans l'espace."],
+["Les télescopes","Observer l'univers.","Les télescopes collectent la lumière ou d'autres rayonnements provenant des objets célestes."],
+["James Webb","Un télescope spatial infrarouge.","Le télescope James-Webb observe principalement dans l'infrarouge et étudie les galaxies, les étoiles et les exoplanètes."],
+["Le Big Bang","Le début de l'expansion cosmique.","Le modèle du Big Bang décrit l'évolution de l'univers à partir d'un état extrêmement chaud et dense."],
+["La matière noire","Une matière invisible.","La matière noire n'émet pas de lumière détectable, mais son influence gravitationnelle se manifeste dans les galaxies."],
+["Les ondes gravitationnelles","Des ondulations de l'espace-temps.","Elles sont produites par des mouvements extrêmes de masses, comme la fusion de deux trous noirs."]
+],
+technologie:[
+["L'intelligence artificielle","Des programmes capables de tâches complexes.","L'intelligence artificielle permet à des machines de reconnaître des images, traiter du langage ou aider à résoudre des problèmes."],
+["Le machine learning","Apprendre à partir de données.","L'apprentissage automatique permet à un programme d'améliorer ses performances à partir d'exemples."],
+["Les réseaux neuronaux","Des modèles inspirés du cerveau.","Les réseaux neuronaux sont des systèmes de calcul composés de couches de paramètres qui apprennent des relations dans les données."],
+["Les robots","Des machines programmables.","Un robot combine souvent des capteurs, des mécanismes et un logiciel pour percevoir son environnement et agir."],
+["L'impression 3D","Fabriquer couche après couche.","Une imprimante 3D construit un objet en ajoutant progressivement de la matière."],
+["La réalité virtuelle","Entrer dans un monde numérique.","La réalité virtuelle utilise un casque pour immerger l'utilisateur dans un environnement numérique interactif."],
+["La réalité augmentée","Ajouter des éléments au monde réel.","La réalité augmentée superpose des informations numériques à la vue du monde réel."],
+["La fibre optique","Internet grâce à la lumière.","La fibre optique transmet des données sous forme d'impulsions lumineuses dans de fins fils de verre ou de plastique."],
+["Le Wi-Fi","Un réseau sans fil.","Le Wi-Fi permet à des appareils de communiquer avec un réseau local par ondes radio."],
+["Le Bluetooth","Relier des appareils à courte distance.","Le Bluetooth est utilisé pour connecter des écouteurs, claviers, manettes et autres appareils."],
+["Les processeurs","Le cerveau d'un ordinateur.","Le processeur exécute des instructions et réalise des calculs."],
+["Les cartes graphiques","Calculer les images.","Une carte graphique réalise de nombreux calculs en parallèle pour afficher des images et rendre des scènes 3D."],
+["La mémoire vive","La mémoire de travail.","La RAM conserve temporairement les données dont les programmes ont besoin pendant leur fonctionnement."],
+["Les SSD","Des stockages rapides.","Un SSD utilise de la mémoire flash pour conserver les fichiers."],
+["Les systèmes d'exploitation","Le logiciel principal d'un appareil.","Windows, Linux, macOS, Android et iOS gèrent le matériel et les applications."],
+["Linux","Un système libre et ouvert.","Linux est une famille de systèmes d'exploitation utilisée sur des serveurs, ordinateurs et appareils embarqués."],
+["Le cloud","Des services informatiques à distance.","Le cloud permet d'utiliser du stockage, des logiciels et de la puissance de calcul hébergés sur des serveurs."],
+["La cybersécurité","Protéger les systèmes numériques.","La cybersécurité rassemble les méthodes qui protègent les appareils, les réseaux et les informations."],
+["Le chiffrement","Rendre les données illisibles sans clé.","Le chiffrement transforme des informations en un format protégé."],
+["Le GPS","Se repérer grâce aux satellites.","Le système GPS utilise les signaux de plusieurs satellites pour calculer une position."],
+["Les drones","Des aéronefs télépilotés ou autonomes.","Les drones sont utilisés pour filmer, cartographier, inspecter et réaliser des recherches."],
+["Les voitures électriques","Rouler grâce à un moteur électrique.","Une voiture électrique utilise un ou plusieurs moteurs alimentés par une batterie rechargeable."],
+["Les batteries lithium-ion","Stocker l'énergie électrique.","Ces batteries sont présentes dans de nombreux appareils et stockent l'énergie grâce au déplacement d'ions lithium."],
+["Les panneaux solaires","Transformer la lumière en électricité.","Les cellules photovoltaïques convertissent une partie de la lumière du Soleil en énergie électrique."],
+["Les éoliennes","Utiliser la force du vent.","Les éoliennes transforment l'énergie du vent en électricité grâce à la rotation de leurs pales."],
+["Le HTML","La structure des pages web.","HTML organise le contenu d'une page web avec des titres, paragraphes, images et liens."],
+["Le CSS","Le style des sites web.","CSS décrit l'apparence des pages web : couleurs, tailles, espacements et mises en page."],
+["JavaScript","Rendre un site interactif.","JavaScript permet de réagir aux actions des visiteurs et de créer des applications web dynamiques."],
+["Les API","Faire communiquer des logiciels.","Une API définit des règles permettant à deux programmes d'échanger des données ou d'utiliser certaines fonctions."],
+["Les bases de données","Organiser les informations.","Une base de données stocke des informations de manière structurée afin de les rechercher et les modifier."],
+["La 5G","Une génération de réseau mobile.","La 5G peut offrir des débits élevés et une latence réduite dans certaines conditions."]
+],
+science:[
+["L'ADN","Le support de l'information génétique.","L'ADN est une molécule qui contient des instructions génétiques. Sa structure est une double hélice."],
+["Les cellules","Les unités du vivant.","Tous les êtres vivants connus sont constitués d'une ou plusieurs cellules."],
+["Les mitochondries","Les centrales énergétiques des cellules.","Les mitochondries participent à la production d'ATP, une molécule utilisée comme source d'énergie."],
+["Les bactéries","Des organismes microscopiques.","Les bactéries sont des êtres vivants unicellulaires très variés. Beaucoup sont utiles."],
+["Les virus","Des agents infectieux particuliers.","Les virus ne peuvent se multiplier qu'en utilisant les mécanismes d'une cellule hôte."],
+["Le système immunitaire","La défense de l'organisme.","Le système immunitaire rassemble des cellules et molécules qui reconnaissent et combattent des agents infectieux."],
+["Les vaccins","Préparer les défenses immunitaires.","Un vaccin entraîne le système immunitaire à reconnaître un agent infectieux."],
+["La photosynthèse","Les plantes utilisent la lumière.","La photosynthèse transforme l'énergie lumineuse en énergie chimique."],
+["La gravité","Une interaction fondamentale.","La gravité attire les corps possédant une masse et joue un rôle majeur dans les orbites."],
+["Les atomes","Les briques de la matière.","Un atome est constitué d'un noyau entouré d'électrons."],
+["Les molécules","Des assemblages d'atomes.","Une molécule est un ensemble d'atomes liés chimiquement."],
+["Le tableau périodique","La carte des éléments chimiques.","Le tableau périodique organise les éléments selon leur numéro atomique et leurs propriétés."],
+["Les réactions chimiques","Transformer la matière.","Une réaction chimique transforme des substances initiales en nouvelles substances."],
+["Les acides et les bases","Deux grandes familles chimiques.","Le pH mesure le caractère acide ou basique d'une solution aqueuse."],
+["L'électricité","Le mouvement des charges.","L'électricité regroupe des phénomènes liés à la présence et au mouvement des charges électriques."],
+["Le magnétisme","Les champs magnétiques.","Le magnétisme est lié au mouvement des charges et aux propriétés de certains matériaux."],
+["La lumière","Une onde électromagnétique.","La lumière visible est une partie du spectre électromagnétique."],
+["Le son","Des vibrations qui se propagent.","Le son est une onde mécanique qui se propage dans un milieu matériel."],
+["Les volcans","Des ouvertures vers l'intérieur de la Terre.","Un volcan est une structure géologique par laquelle du magma et des gaz peuvent atteindre la surface."],
+["Les séismes","Des vibrations du sol.","Les séismes sont causés par une libération brutale d'énergie dans la croûte terrestre."],
+["Les plaques tectoniques","La surface terrestre en mouvement.","La lithosphère est divisée en plaques qui se déplacent lentement."],
+["Les fossiles","Des traces du passé.","Les fossiles sont des restes ou des traces d'organismes anciens conservés dans les roches."],
+["L'évolution","La diversité du vivant au fil du temps.","L'évolution correspond aux changements héréditaires des populations au fil des générations."],
+["Les dinosaures","Des animaux du passé.","Les dinosaures ont dominé de nombreux écosystèmes terrestres. Les oiseaux actuels sont leurs descendants."],
+["Les mammifères","Des animaux aux caractéristiques communes.","Les mammifères possèdent notamment des poils et des glandes mammaires."],
+["Les insectes","Une immense diversité animale.","Les insectes possèdent six pattes et un corps généralement divisé en trois parties."],
+["Les océans","Des écosystèmes gigantesques.","Les océans couvrent environ 71 % de la surface terrestre et abritent une biodiversité immense."],
+["Le cycle de l'eau","L'eau circule en permanence.","L'eau s'évapore, se condense en nuages, puis retombe sous forme de précipitations."],
+["L'effet de serre","Un phénomène naturel.","Certains gaz atmosphériques absorbent et réémettent une partie du rayonnement infrarouge terrestre."],
+["La biodiversité","La variété du vivant.","La biodiversité comprend la diversité des espèces, des gènes et des écosystèmes."]
+],
+mysteres:[
+["Le triangle des Bermudes","Une région entourée de récits.","Cette zone de l'Atlantique est associée à des histoires de disparitions. Les conditions météo et les erreurs humaines expliquent de nombreux incidents."],
+["Le monstre du Loch Ness","Une légende écossaise célèbre.","Malgré de nombreuses recherches, aucune preuve scientifique solide ne confirme l'existence de Nessie."],
+["Les lignes de Nazca","Des dessins géants dans le désert.","Au Pérou, des géoglyphes gigantesques ont été tracés dans le sol. Leur fonction exacte est encore étudiée."],
+["L'île de Pâques","Les statues Moaï.","Les archéologues étudient la fabrication, le transport et la signification de ces statues monumentales."],
+["Stonehenge","Un monument préhistorique.","Stonehenge est un ensemble de pierres dressées en Angleterre, construit en plusieurs étapes."],
+["Les pyramides d'Égypte","Des monuments impressionnants.","Les pyramides ont été construites comme tombeaux royaux. Leur construction repose sur le travail organisé de sociétés humaines."],
+["L'Atlantide","Une cité racontée par Platon.","Aucune preuve archéologique ne démontre que l'Atlantide ait existé comme civilisation décrite dans les textes."],
+["Le manuscrit de Voynich","Un livre difficile à comprendre.","Ce manuscrit illustré est écrit dans une écriture inconnue. Aucun déchiffrement accepté n'a été établi."],
+["Le signal Wow!","Un signal radio intrigant.","Détecté en 1977, ce signal radio inhabituel n'a jamais été retrouvé de manière convaincante."],
+["Les sursauts radio rapides","Des flashes cosmiques très brefs.","Ces émissions radio extrêmement courtes et puissantes proviennent de l'espace lointain."],
+["Les lumières de Hessdalen","Des lumières observées en Norvège.","Des lumières inhabituelles ont été observées dans cette vallée et étudiées par des scientifiques."],
+["Les mirages","Quand l'air trompe nos yeux.","Un mirage est un phénomène optique provoqué par la réfraction de la lumière dans des couches d'air différentes."],
+["Les pierres mouvantes","Des roches qui semblent glisser seules.","Dans la vallée de la Mort, le vent et de fines couches de glace peuvent déplacer certaines pierres."],
+["Les cercles de culture","Des motifs dans les champs.","Beaucoup de motifs circulaires sont des créations humaines, sans preuve solide d'une origine surnaturelle."],
+["Les rêves lucides","Savoir que l'on rêve.","Dans un rêve lucide, une personne prend conscience qu'elle rêve et peut parfois influencer le rêve."],
+["Le déjà-vu","Cette impression de revivre une scène.","Le déjà-vu est une impression de familiarité ressentie dans une situation nouvelle."],
+["Les illusions d'optique","Notre cerveau interprète les images.","Elles montrent que notre perception dépend de mécanismes cérébraux qui interprètent formes et contrastes."],
+["Les profondeurs océaniques","Un monde encore peu exploré.","Les profondeurs océaniques sont difficiles à étudier à cause de l'obscurité et de la pression."],
+["Les abysses","Un environnement extrême.","Les abysses sont des régions profondes où règnent l'obscurité et une pression très élevée."],
+["Les sources hydrothermales","Des oasis au fond de l'océan.","Elles libèrent de l'eau chaude riche en minéraux et abritent des communautés étonnantes."],
+["Les animaux bioluminescents","Produire sa propre lumière.","La bioluminescence est une production de lumière par réaction chimique."],
+["Les oiseaux migrateurs","Des navigateurs naturels.","Les oiseaux utilisent plusieurs repères pour s'orienter, notamment le Soleil et le champ magnétique terrestre."],
+["Le noyau terrestre","Un cœur métallique.","La Terre possède un noyau principalement composé de fer et de nickel."],
+["Le champ magnétique terrestre","Un bouclier naturel.","Il dévie une partie des particules chargées du vent solaire et permet notamment les aurores polaires."],
+["L'antimatière","Le miroir de la matière.","Chaque particule possède une antiparticule correspondante. Leur rencontre peut libérer de l'énergie."],
+["Les neutrinos","Des particules presque insaisissables.","Les neutrinos interagissent très faiblement avec la matière et traversent facilement de grandes distances."],
+["Les nombres premiers","Des nombres particuliers.","Un nombre premier possède exactement deux diviseurs positifs : 1 et lui-même."],
+["La conjecture de Goldbach","Une question mathématique ancienne.","Elle affirme que tout entier pair supérieur à 2 peut s'écrire comme somme de deux nombres premiers."],
+["L'hypothèse de Riemann","Un grand problème mathématique.","Cette hypothèse concerne la répartition des nombres premiers et demeure non résolue."],
+["Les cartes anciennes","Comment représentait-on le monde ?","Les cartes anciennes reflètent les connaissances et les croyances de leur époque."]
+],
+gaming:[
+["L'histoire des jeux vidéo","Des premiers jeux aux mondes modernes.","Les jeux vidéo ont évolué des premières expériences informatiques aux productions modernes sur consoles, PC et téléphones."],
+["Les premières consoles","Les débuts du jeu à la maison.","Les premières consoles domestiques ont popularisé le jeu vidéo dans les foyers."],
+["Comment créer un jeu vidéo","De l'idée au jeu jouable.","Créer un jeu implique de concevoir les règles, les personnages, les niveaux, les sons et les interactions."],
+["Les secrets de Minecraft","Un monde construit en blocs.","Minecraft génère des mondes à partir de règles procédurales et permet une grande liberté de création."],
+["Les jeux de course","Simuler la vitesse.","Les jeux de course combinent physique, circuits, véhicules et sensations de conduite."],
+["L'intelligence artificielle dans les jeux","Des personnages qui réagissent.","L'IA peut contrôler des adversaires, gérer des déplacements ou adapter certaines réactions."],
+["Les mondes ouverts","Explorer librement.","Un monde ouvert permet au joueur d'explorer un environnement étendu avec une certaine liberté."],
+["Les graphismes 3D","Donner du volume aux jeux.","La 3D utilise des modèles, des textures, des lumières et des caméras."],
+["Les musiques de jeux vidéo","Une identité sonore.","La musique accompagne l'action, renforce l'ambiance et aide à reconnaître un jeu."],
+["L'e-sport","La compétition de jeux vidéo.","L'e-sport organise des compétitions avec des joueurs, des équipes et des spectateurs."],
+["Les moteurs de jeu","Les outils des développeurs.","Un moteur de jeu fournit des outils pour gérer graphismes, sons, collisions et animations."],
+["Unity","Créer des jeux en 2D et en 3D.","Unity est un moteur de développement utilisé pour créer des jeux et expériences interactives, notamment avec C#."],
+["Unreal Engine","Un moteur graphique puissant.","Unreal Engine est connu pour ses outils 3D et ses capacités graphiques."],
+["Godot","Un moteur libre pour créer des jeux.","Godot est un moteur open source qui permet de créer des jeux en 2D et en 3D."],
+["Blender","Créer des objets en 3D.","Blender est un logiciel libre de modélisation, animation et rendu 3D."],
+["Les textures","Habiller les surfaces.","Les textures ajoutent des détails visuels aux modèles 3D."],
+["Les shaders","Des effets visuels calculés.","Les shaders déterminent comment les surfaces et les pixels sont rendus à l'écran."],
+["Le ray tracing","Simuler le trajet de la lumière.","Le ray tracing calcule le trajet de rayons lumineux pour produire des reflets et des ombres."],
+["Les FPS","La fluidité d'un jeu.","Les images par seconde indiquent combien d'images sont affichées chaque seconde."],
+["La latence","Le délai entre action et réaction.","Une latence faible rend généralement les commandes en ligne plus réactives."],
+["Les serveurs multijoueurs","Jouer ensemble à distance.","Les serveurs coordonnent les actions des joueurs et synchronisent les événements."],
+["Le matchmaking","Trouver une partie adaptée.","Le matchmaking rassemble des joueurs selon différents critères comme le niveau ou la région."],
+["Les mondes procéduraux","Des environnements générés par algorithmes.","La génération procédurale utilise des règles et du hasard pour créer des cartes ou des niveaux."],
+["Les speedruns","Finir un jeu le plus vite possible.","Le speedrun consiste à terminer un jeu ou un objectif dans le temps le plus court possible."],
+["Les mods","Modifier ou enrichir un jeu.","Un mod ajoute du contenu, change des règles ou améliore un jeu."],
+["Les jeux indépendants","Des créations de petites équipes.","Les jeux indépendants sont souvent développés par de petites équipes et explorent des idées originales."],
+["Les jeux sandbox","Créer ses propres objectifs.","Un jeu sandbox laisse une grande liberté d'action pour construire, explorer ou expérimenter."],
+["Les jeux de stratégie","Penser avant d'agir.","Les jeux de stratégie demandent de gérer des ressources et d'anticiper les décisions adverses."],
+["Le level design","Concevoir les niveaux.","Le level design organise les espaces, obstacles et récompenses pour guider le joueur."],
+["Le game design","Concevoir les règles.","Le game design définit les mécaniques, objectifs, règles et sensations d'un jeu."]
+]
+};
+
+const univers={},tousLesArticles=[];
+themes.forEach(theme=>{
+ const liste=sujets[theme.id],articles=[];
+ for(let i=0;i<100;i++){
+  const sujet=liste[i%liste.length],repetition=Math.floor(i/liste.length);
+  let titre=sujet[0],description=sujet[1],texte=sujet[2];
+  if(repetition>0){
+   titre+=" — approfondissement "+repetition;
+   description+=" Découvre un nouvel angle de ce sujet.";
+   texte+=" Pour aller plus loin, compare ce sujet à d'autres exemples et cherche comment les spécialistes l'étudient.";
+  }
+  articles.push({
+   id:theme.id+"-"+(i+1),titre,description,texte,
+   univers:theme.nom,emoji:theme.emoji,
+   difficulte:repetition===0?"Débutant":repetition===1?"Intermédiaire":"Avancé",
+   lecture:Math.max(2,Math.min(8,Math.ceil(texte.length/180)))
+  });
+ }
+ univers[theme.id]={...theme,articles};
+ tousLesArticles.push(...articles);
+});
+
+/* =========================
+   SAUVEGARDE ET PROFIL
+========================= */
+
+function chargerJSON(cle,defaut){
+ try{return JSON.parse(localStorage.getItem(cle))??defaut}catch(e){return defaut}
+}
+function sauvegarder(cle,valeur){
+ try{localStorage.setItem(cle,JSON.stringify(valeur))}catch(e){}
+}
+function echapper(s){
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function dateLocale(){
+ const d=new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function nouvelleJournee(){
+ return {date:dateLocale(),lectures:0,quiz:false,daily:false,missionQuiz:false,missionFavori:false};
+}
+
+let profil=chargerJSON("nexusProfil",{
+ pseudo:"Explorateur",avatar:"🧑‍🚀"
+});
+let favoris=chargerJSON("nexusFavoris",[]).filter(id=>tousLesArticles.some(a=>a.id===id));
+let progression=chargerJSON("nexusProgression",{
+ xp:0,articles:[],quizTermines:0,meilleurQuiz:0,badges:[],jour:nouvelleJournee()
+});
+if(!Array.isArray(progression.articles))progression.articles=[];
+if(!Array.isArray(progression.badges))progression.badges=[];
+if(!progression.jour||progression.jour.date!==dateLocale())progression.jour=nouvelleJournee();
+
+function sauvegarderProfil(){sauvegarder("nexusProfil",profil)}
+function sauvegarderFavoris(){sauvegarder("nexusFavoris",favoris)}
+function sauvegarderProgression(){sauvegarder("nexusProgression",progression)}
+function trouverArticle(id){return tousLesArticles.find(a=>a.id===id)||null}
+function niveau(){return Math.floor(progression.xp/100)+1}
+function xpNiveau(){return progression.xp%100}
+
+/* =========================
+   XP, BADGES ET MISSIONS
+========================= */
+
+const badgesDef=[
+ {id:"premiere",nom:"Première découverte",icone:"🌟",description:"Lire ta première découverte.",condition:p=>p.articles.length>=1},
+ {id:"curieux",nom:"Curieux",icone:"🔎",description:"Lire 10 découvertes.",condition:p=>p.articles.length>=10},
+ {id:"explorateur",nom:"Explorateur",icone:"🧭",description:"Lire 25 découvertes.",condition:p=>p.articles.length>=25},
+ {id:"bibliotheque",nom:"Bibliothèque",icone:"📚",description:"Lire 50 découvertes.",condition:p=>p.articles.length>=50},
+ {id:"quiz",nom:"Premier quiz",icone:"🧠",description:"Terminer un quiz.",condition:p=>p.quizTermines>=1},
+ {id:"genie",nom:"Petit génie",icone:"💡",description:"Obtenir au moins 8/10 à un quiz.",condition:p=>p.meilleurQuiz>=8},
+ {id:"perfect",nom:"Sans faute",icone:"🏆",description:"Obtenir 10/10 à un quiz.",condition:p=>p.meilleurQuiz===10},
+ {id:"univers",nom:"Grand explorateur",icone:"🌌",description:"Lire une découverte dans chaque univers.",condition:p=>themes.every(t=>p.articles.some(id=>id.startsWith(t.id+"-")))},
+ {id:"collection",nom:"Collectionneur",icone:"❤️",description:"Ajouter 10 favoris.",condition:()=>favoris.length>=10},
+ {id:"niveau5",nom:"En progression",icone:"🚀",description:"Atteindre le niveau 5.",condition:p=>p.xp>=400},
+ {id:"profil",nom:"Identité NEXUS",icone:"👤",description:"Personnaliser ton profil.",condition:()=>profil.pseudo!=="Explorateur"},
+ {id:"missions",nom:"Mission accomplie",icone:"🎯",description:"Terminer une mission quotidienne.",condition:p=>p.jour.lecturesRecompense||p.jour.quiz||p.jour.daily}
+];
+
+function verifierBadges(){
+ let nouveaux=[];
+ badgesDef.forEach(b=>{
+  if(!progression.badges.includes(b.id)&&b.condition(progression)){
+   progression.badges.push(b.id);nouveaux.push(b);
+  }
+ });
+ sauvegarderProgression();
+ if(nouveaux.length){
+  nouveaux.forEach(b=>alert("🎖️ Badge débloqué : "+b.icone+" "+b.nom+" !"));
+ }
+}
+function ajouterXP(nombre){
+ progression.xp+=nombre;
+ sauvegarderProgression();
+ verifierBadges();
+ actualiserMiniProgression();
+}
+function lireDecouverte(id){
+ if(progression.articles.includes(id))return;
+ progression.articles.push(id);
+ progression.jour.lectures++;
+ ajouterXP(10);
+ verifierObjectifLectures();
+ sauvegarderProgression();
+}
+function verifierObjectifLectures(){
+ if(progression.jour.lectures>=5&&!progression.jour.lecturesRecompense){
+  progression.jour.lecturesRecompense=true;
+  ajouterXP(25);
+  alert("🎯 Mission terminée : 5 découvertes lues ! +25 XP");
+ }
+}
+function enregistrerQuiz(score){
+ progression.quizTermines++;
+ progression.meilleurQuiz=Math.max(progression.meilleurQuiz,score);
+ ajouterXP(10+score*5);
+ if(!progression.jour.quiz){
+  progression.jour.quiz=true;
+  ajouterXP(20);
+ }
+ progression.jour.missionQuiz=true;
+ verifierBadges();
+ sauvegarderProgression();
+}
+function terminerQuestionDuJour(){
+ if(progression.jour.daily)return;
+ progression.jour.daily=true;
+ ajouterXP(15);
+ sauvegarderProgression();
+}
+function actualiserMiniProgression(){
+ const zone=document.getElementById("miniProgression");
+ if(!zone)return;
+ zone.innerHTML=`
+ <section class="panel">
+  <div class="progress-top">
+   <div><p class="eyebrow">BON RETOUR, ${echapper(profil.pseudo.toUpperCase())}</p>
+   <div class="level-number">${profil.avatar} Niveau ${niveau()}</div></div>
+   <div><strong>${progression.xp} XP</strong><p class="muted">Encore ${100-xpNiveau()} XP pour le niveau suivant</p></div>
+  </div>
+  <div class="xp-bar"><div class="xp-fill" style="width:${xpNiveau()}%"></div></div>
+  <p class="muted">${progression.articles.length} découvertes lues · ${progression.badges.length}/${badgesDef.length} badges</p>
+ </section>`;
+}
+
+/* =========================
+   AFFICHAGE DES DÉCOUVERTES
+========================= */
+
+function estFavori(id){return favoris.includes(id)}
+function changerFavori(id){
+ if(!trouverArticle(id))return;
+ favoris=estFavori(id)?favoris.filter(x=>x!==id):[...favoris,id];
+ sauvegarderFavoris();verifierBadges();
+ const c=document.getElementById("contenu");
+ if(c.dataset.page==="favoris"){afficherFavoris();return}
+ if(c.dataset.page==="article"){afficherArticle(id);return}
+ if(c.dataset.page==="recherche"){rechercher();return}
+ const h=c.querySelector("h2");
+ const cle=themes.find(t=>t.nom===h?.textContent)?.id;
+ if(cle)ouvrirUnivers(cle);
+}
+function creerCarte(a){
+ return `<article class="card">
+ <div class="category">${a.emoji} ${a.univers.toUpperCase()}</div>
+ <h3>${echapper(a.titre)}</h3>
+ <p>${echapper(a.description)}</p>
+ <div class="card-actions">
+  <button class="primary" onclick="afficherArticle('${a.id}')">Découvrir →</button>
+  <button class="heart" onclick="changerFavori('${a.id}')">${estFavori(a.id)?"♥":"♡"}</button>
+ </div></article>`;
+}
+function afficherCartes(liste){return `<div class="cards">${liste.map(creerCarte).join("")}</div>`}
+function afficherUnivers(){
+ document.getElementById("universes").innerHTML=themes.map(t=>{
+  const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
+  return `<div class="universe" onclick="ouvrirUnivers('${t.id}')">
+   <div class="emoji">${t.emoji}</div><h3>${t.nom}</h3>
+   <p>${t.description}</p>
+   <p style="margin-top:12px;color:var(--beige)">${lus}/100 découvertes lues</p>
+  </div>`;
+ }).join("");
+ document.getElementById("total").textContent=tousLesArticles.length+" découvertes à explorer";
+ actualiserMiniProgression();
+ afficherCarteAccueil();
+}
+function afficherContenu(html,page=""){
+ document.getElementById("home").classList.add("hidden");
+ const c=document.getElementById("contenu");
+ c.classList.remove("hidden");c.dataset.page=page;c.innerHTML=html;
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function ouvrirUnivers(cle){
+ const u=univers[cle];if(!u)return;
+ afficherContenu(`<div class="content-head"><h2>${u.emoji} ${u.nom}</h2><button onclick="accueil()">← Retour</button></div>${afficherCartes(u.articles)}`,"univers");
+}
+function afficherArticle(id){
+ const a=typeof id==="string"?trouverArticle(id):id;if(!a)return;
+ lireDecouverte(a.id);
+ afficherContenu(`
+ <article class="article">
+  <button onclick="retourUnivers('${a.id}')">← Retour</button>
+  <p class="category">${a.emoji} ${a.univers.toUpperCase()}</p>
+  <h2 data-article-id="${a.id}">${echapper(a.titre)}</h2>
+  <p>${echapper(a.description)}</p>
+  <div class="article-meta">
+   <span class="pill">📚 ${a.difficulte}</span>
+   <span class="pill">⏱️ ${a.lecture} min de lecture</span>
+   <span class="pill">⭐ +10 XP à la première lecture</span>
+  </div>
+  <div class="article-text">${echapper(a.texte)}</div>
+  <p style="color:var(--beige)">⭐ ${progression.articles.includes(a.id)?"Découverte enregistrée":"Découverte"}</p>
+  <button onclick="changerFavori('${a.id}')" style="margin-top:15px">${estFavori(a.id)?"♥ Retirer des favoris":"♡ Ajouter aux favoris"}</button>
+ </article>`,"article");
+}
+function retourUnivers(id){
+ const a=trouverArticle(id),cle=themes.find(t=>t.nom===a?.univers)?.id;
+ if(cle)ouvrirUnivers(cle);else accueil();
+}
+function afficherFavoris(){
+ afficherContenu(`<div class="content-head"><h2>♡ Mes favoris</h2><button onclick="accueil()">← Retour</button></div>${favoris.length?afficherCartes(favoris):'<div class="empty">Tu n’as pas encore de favoris.</div>'}`,"favoris");
+}
+function rechercher(){
+ const mot=document.getElementById("recherche").value.trim().toLocaleLowerCase("fr");
+ if(!mot){accueil();return}
+ const r=tousLesArticles.filter(a=>(a.titre+" "+a.description+" "+a.texte+" "+a.univers).toLocaleLowerCase("fr").includes(mot));
+ afficherContenu(`<div class="content-head"><h2>Résultats de recherche</h2><button onclick="accueil()">← Retour</button></div><p class="muted">${r.length} résultat(s) pour « ${echapper(mot)} »</p>${r.length?afficherCartes(r):'<div class="empty">Aucune découverte trouvée.</div>'}`,"recherche");
+}
+function decouverteAleatoire(){afficherArticle(tousLesArticles[Math.floor(Math.random()*tousLesArticles.length)])}
+function accueil(){
+ document.getElementById("contenu").classList.add("hidden");
+ document.getElementById("home").classList.remove("hidden");
+ document.getElementById("recherche").value="";
+ actualiserMiniProgression();window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* =========================
+   PROFIL
+========================= */
+
+function afficherProfil(){
+ const avatars=["🧑‍🚀","🧑‍💻","🧙","🦊","🐼","🐺","🐉","👾","🤖","🦉","🦁","🐸"];
+ afficherContenu(`
+ <div class="content-head"><h2>👤 Mon profil</h2><button onclick="accueil()">← Retour</button></div>
+ <div class="profile-grid">
+  <div class="profile-card">
+   <div class="avatar">${profil.avatar}</div>
+   <h2>${echapper(profil.pseudo)}</h2>
+   <p class="muted">Explorateur NEXUS · Niveau ${niveau()}</p>
+   <div class="level-number">${progression.xp} XP</div>
+  </div>
+  <div class="panel">
+   <h2>Personnaliser mon profil</h2>
+   <label for="pseudo">Ton pseudo</label>
+   <div class="profile-form">
+    <input id="pseudo" maxlength="20" value="${echapper(profil.pseudo)}" placeholder="Ton pseudo">
+    <button class="primary" onclick="enregistrerProfil()">Enregistrer</button>
+   </div>
+   <h3 style="margin-top:20px">Choisir un avatar</h3>
+   <div class="card-actions" style="flex-wrap:wrap">
+    ${avatars.map(a=>`<button onclick="choisirAvatar('${a}')" style="font-size:24px">${a}</button>`).join("")}
+   </div>
+  </div>
+ </div>`,"profil");
+}
+function enregistrerProfil(){
+ const valeur=document.getElementById("pseudo").value.trim();
+ if(!valeur){alert("Choisis un pseudo !");return}
+ profil.pseudo=valeur;sauvegarderProfil();verifierBadges();afficherProfil();actualiserMiniProgression();
+}
+function choisirAvatar(a){
+ profil.avatar=a;sauvegarderProfil();afficherProfil();actualiserMiniProgression();
+}
+
+/* =========================
+   CARTE D'EXPLORATION
+========================= */
+
+function afficherCarteAccueil(){
+ const zone=document.getElementById("carteExploration");if(!zone)return;
+ zone.innerHTML=themes.map(t=>{
+  const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
+  return `<div class="map-node">
+   <div style="font-size:27px">${t.emoji}</div>
+   <strong>${t.nom}</strong>
+   <small>${lus}/100 découvertes</small>
+   <div class="xp-bar"><div class="xp-fill" style="width:${lus}%"></div></div>
+   <button onclick="ouvrirUnivers('${t.id}')">Explorer</button>
+  </div>`;
+ }).join("");
+}
+function afficherExploration(){
+ afficherContenu(`
+ <div class="content-head"><h2>🗺️ Carte d'exploration</h2><button onclick="accueil()">← Retour</button></div>
+ <p class="muted">Chaque univers est un territoire à explorer. Plus tu découvres, plus ta carte se complète !</p>
+ <div class="map-line" style="align-items:stretch;flex-wrap:wrap">
+ ${themes.map(t=>{
+  const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
+  return `<div class="map-node">
+   <div style="font-size:42px">${t.emoji}</div>
+   <strong>${t.nom}</strong><p class="muted">${t.description}</p>
+   <p>${lus}/100 découvertes</p>
+   <div class="xp-bar"><div class="xp-fill" style="width:${lus}%"></div></div>
+   <button class="primary" onclick="ouvrirUnivers('${t.id}')">Visiter cet univers</button>
+  </div>`;
+ }).join("")}
+ </div>
+ <section class="panel">
+  <h2>🌟 Progression globale</h2>
+  <p>${progression.articles.length} découvertes sur 500 explorées.</p>
+  <div class="xp-bar"><div class="xp-fill" style="width:${progression.articles.length/5}%"></div></div>
+ </section>`,"exploration");
+}
+
+/* =========================
+   MISSIONS QUOTIDIENNES
+========================= */
+
+function afficherMissions(){
+ const j=progression.jour;
+ const missions=[
+  {nom:"Lire 5 découvertes",desc:"Explore cinq fiches aujourd'hui.",fait:!!j.lecturesRecompense,etat:Math.min(j.lectures,5)+"/5",recompense:"+25 XP"},
+  {nom:"Terminer un quiz",desc:"Teste tes connaissances.",fait:!!j.quiz,etat:j.quiz?"Terminé":"À faire",recompense:"+20 XP"},
+  {nom:"Question du jour",desc:"Réponds au défi quotidien.",fait:!!j.daily,etat:j.daily?"Terminé":"À faire",recompense:"+15 XP"},
+  {nom:"Ajouter un favori",desc:"Sauvegarde une découverte.",fait:!!j.missionFavori,etat:j.missionFavori?"Terminé":"À faire",recompense:"+10 XP"}
+ ];
+ return missions.map(m=>`
+ <div class="mission ${m.fait?"done":""}">
+  <div><strong>${m.fait?"✅":"🎯"} ${m.nom}</strong><br><small>${m.desc}</small></div>
+  <div style="text-align:right"><strong>${m.etat}</strong><br><small>${m.recompense}</small></div>
+ </div>`).join("");
+}
+
+/* =========================
+   PROGRESSION ET STATISTIQUES
+========================= */
+
+function afficherProgression(){
+ verifierBadges();
+ const p=progression;
+ const badges=badgesDef.map(b=>{
+  const ok=p.badges.includes(b.id);
+  return `<div class="badge-card ${ok?"":"locked"}">
+   <div class="badge-icon">${b.icone}</div>
+   <strong>${b.nom}</strong><p>${b.description}</p>
+   <p>${ok?"✅ Débloqué":"🔒 Verrouillé"}</p>
+  </div>`;
+ }).join("");
+ afficherContenu(`
+ <div class="content-head"><h2>🏆 Ma progression</h2><button onclick="accueil()">← Retour</button></div>
+ <section class="panel">
+  <div class="progress-top">
+   <div><p class="eyebrow">TON NIVEAU</p><div class="level-number">${profil.avatar} Niveau ${niveau()}</div></div>
+   <div><strong>${p.xp} XP</strong><p class="muted">${xpNiveau()} / 100 XP</p></div>
+  </div>
+  <div class="xp-bar"><div class="xp-fill" style="width:${xpNiveau()}%"></div></div>
+  <p class="muted">Encore ${100-xpNiveau()} XP pour atteindre le niveau ${niveau()+1}.</p>
+ </section>
+ <h2 class="section-title">📊 Mes statistiques</h2>
+ <div class="stats-grid">
+  <div class="stat-card"><strong>${p.articles.length}</strong>Découvertes lues</div>
+  <div class="stat-card"><strong>${p.quizTermines}</strong>Quiz terminés</div>
+  <div class="stat-card"><strong>${p.meilleurQuiz}/10</strong>Meilleur score</div>
+  <div class="stat-card"><strong>${favoris.length}</strong>Favoris</div>
+  <div class="stat-card"><strong>${p.badges.length}/${badgesDef.length}</strong>Badges</div>
+  <div class="stat-card"><strong>${Math.min(100,Math.round(p.articles.length/5))}%</strong>Bibliothèque explorée</div>
+ </div>
+ <section class="panel">
+  <h2>🎯 Missions quotidiennes</h2>
+  <div class="missions">${afficherMissions()}</div>
+ </section>
+ <section class="panel">
+  <h2>🎖️ Collection de badges</h2>
+  <div class="badges">${badges}</div>
+ </section>
+ <section class="panel">
+  <h2>⚙️ Gestion de la progression</h2>
+  <p class="muted">Cette action efface tes XP, tes badges et tes découvertes enregistrées.</p>
+  <button onclick="reinitialiserProgression()">Réinitialiser ma progression</button>
+ </section>`,"progression");
+}
+function reinitialiserProgression(){
+ if(!confirm("Veux-tu vraiment remettre ta progression à zéro ?"))return;
+ progression={xp:0,articles:[],quizTermines:0,meilleurQuiz:0,badges:[],jour:nouvelleJournee()};
+ sauvegarderProgression();afficherProgression();afficherUnivers();
+}
+
+/* =========================
+   QUIZ
+========================= */
+
+const questionsQuiz=[
+{q:"Quelle est la plus grande planète du système solaire ?",choix:["Mars","Jupiter","Saturne","Neptune"],reponse:1,explication:"Jupiter est la plus grande planète de notre système solaire."},
+{q:"Quel langage est principalement utilisé avec Unity ?",choix:["Python","HTML","C#","CSS"],reponse:2,explication:"Unity utilise principalement le langage C# pour les scripts."},
+{q:"Combien de pattes possède un insecte ?",choix:["4","6","8","10"],reponse:1,explication:"Un insecte possède six pattes."},
+{q:"Quel est le nom de notre galaxie ?",choix:["Andromède","Sombrero","Voie lactée","Orion"],reponse:2,explication:"Notre système solaire se trouve dans la Voie lactée."},
+{q:"Quel logiciel permet de créer des modèles 3D ?",choix:["Blender","Excel","Notepad","Paint"],reponse:0,explication:"Blender est un logiciel de création et d'animation 3D."},
+{q:"Que désigne le sigle FPS dans les jeux vidéo ?",choix:["Fast Player System","Frames Per Second","First Power Screen","Full Play Speed"],reponse:1,explication:"FPS signifie images par seconde."},
+{q:"Quelle molécule contient l'information génétique ?",choix:["L'ADN","L'eau","Le glucose","L'oxygène"],reponse:0,explication:"L'ADN contient les instructions génétiques des êtres vivants."},
+{q:"Quelle planète est surnommée la planète rouge ?",choix:["Vénus","Mercure","Mars","Uranus"],reponse:2,explication:"Mars doit sa couleur rougeâtre à l'oxyde de fer de son sol."},
+{q:"Quel moteur de jeu est open source ?",choix:["Godot","Unity","Unreal Engine","Aucun"],reponse:0,explication:"Godot est un moteur de jeu libre et open source."},
+{q:"Quelle technologie transmet des données grâce à la lumière ?",choix:["Bluetooth","Wi-Fi","Fibre optique","NFC"],reponse:2,explication:"La fibre optique utilise des impulsions lumineuses."},
+{q:"Quelle est la formule chimique de l'eau ?",choix:["CO2","O2","H2O","NaCl"],reponse:2,explication:"Une molécule d'eau contient deux atomes d'hydrogène et un atome d'oxygène."},
+{q:"Dans Minecraft, quel matériau permet de fabriquer des outils très résistants ?",choix:["Bois","Pierre","Diamant","Sable"],reponse:2,explication:"Le diamant permet de fabriquer des outils très résistants."},
+{q:"Quel est le rôle principal d'une carte graphique ?",choix:["Refroidir le PC","Calculer et afficher les images","Stocker les fichiers","Alimenter le PC"],reponse:1,explication:"Le GPU effectue des calculs graphiques."},
+{q:"Quelle planète possède des anneaux très célèbres ?",choix:["Saturne","Mercure","Mars","Terre"],reponse:0,explication:"Saturne est célèbre pour son vaste système d'anneaux."},
+{q:"Quel langage structure le contenu d'une page web ?",choix:["CSS","HTML","C#","SQL"],reponse:1,explication:"HTML organise les titres, paragraphes, images et liens d'une page."},
+{q:"Quel phénomène explique les étoiles filantes ?",choix:["Des étoiles qui tombent","Des météores","Des satellites","Des planètes"],reponse:1,explication:"Une étoile filante est un météore qui traverse l'atmosphère."},
+{q:"Quel gaz les plantes absorbent-elles pendant la photosynthèse ?",choix:["Oxygène","Hélium","Dioxyde de carbone","Azote"],reponse:2,explication:"Les plantes utilisent notamment le dioxyde de carbone et l'eau."},
+{q:"Quel appareil permet d'observer les astres lointains ?",choix:["Microscope","Télescope","Thermomètre","Baromètre"],reponse:1,explication:"Un télescope collecte la lumière des objets célestes."},
+{q:"Quel composant conserve temporairement les données utilisées par le PC ?",choix:["RAM","SSD","Alimentation","Ventilateur"],reponse:0,explication:"La mémoire vive (RAM) sert de mémoire de travail."},
+{q:"Quel est le nom du célèbre moteur de jeu d'Epic Games ?",choix:["Unity","Godot","Unreal Engine","Blender"],reponse:2,explication:"Unreal Engine est développé par Epic Games."}
+];
+
+let quizActuel=[],questionIndex=0,scoreQuiz=0,quizRepondu=false;
+function demarrerQuiz(){
+ quizActuel=[...questionsQuiz].sort(()=>Math.random()-.5).slice(0,10);
+ questionIndex=0;scoreQuiz=0;afficherQuestionQuiz();
+}
+function afficherQuestionQuiz(){
+ const zone=document.getElementById("quizZoneResultat");if(!zone)return;
+ if(questionIndex>=quizActuel.length){terminerQuiz();return}
+ quizRepondu=false;const q=quizActuel[questionIndex];
+ zone.innerHTML=`<div class="quiz-result"><p>Question ${questionIndex+1}/10 · ⭐ Score : ${scoreQuiz}</p>
+ <div class="quiz-question">${echapper(q.q)}</div>
+ <div class="quiz-options">${q.choix.map((x,i)=>`<button onclick="repondreQuiz(${i})">${echapper(x)}</button>`).join("")}</div>
+ <div id="quizExplication"></div></div>`;
+}
+function repondreQuiz(index){
+ if(quizRepondu)return;quizRepondu=true;
+ const q=quizActuel[questionIndex],boutons=document.querySelectorAll("#quizZoneResultat .quiz-options button");
+ if(index===q.reponse)scoreQuiz++;
+ boutons.forEach((b,i)=>{b.disabled=true;if(i===q.reponse)b.classList.add("correct");if(i===index&&index!==q.reponse)b.classList.add("wrong")});
+ document.getElementById("quizExplication").innerHTML=`<div class="quiz-result"><strong>${index===q.reponse?"✅ Bonne réponse !":"❌ Pas tout à fait !"}</strong><p>${echapper(q.explication)}</p><button class="primary" onclick="questionSuivante()">${questionIndex===quizActuel.length-1?"Voir mon résultat":"Question suivante →"}</button></div>`;
+}
+function questionSuivante(){questionIndex++;afficherQuestionQuiz()}
+function terminerQuiz(){
+ enregistrerQuiz(scoreQuiz);
+ document.getElementById("quizZoneResultat").innerHTML=`<div class="quiz-result">
+ <h2>🏁 Quiz terminé !</h2><p>Tu as obtenu <strong>${scoreQuiz}/10</strong>.</p>
+ <p>🏆 Ton meilleur score : ${progression.meilleurQuiz}/10</p>
+ <p>🎉 Tu gagnes ${10+scoreQuiz*5} XP pour ce quiz.</p>
+ <button class="primary" onclick="demarrerQuiz()">🔄 Rejouer</button>
+ </div>`;
+ actualiserMiniProgression();
+}
+
+/* =========================
+   QUESTION DU JOUR
+========================= */
+
+function indiceJour(){
+ const d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
+}
+function afficherQuestionDuJour(){
+ const zone=document.getElementById("quizZoneResultat");
+ const q=questionsQuiz[indiceJour()%questionsQuiz.length];
+ const date=new Date().toLocaleDateString("fr-FR");
+ zone.innerHTML=`<div class="quiz-result">
+ <h3>📅 Question du jour</h3><p>${date}</p>
+ <div class="quiz-question">${echapper(q.q)}</div>
+ <div class="quiz-options">${q.choix.map((x,i)=>`<button onclick="repondreQuestionDuJour(${i})" ${progression.jour.daily?"disabled":""}>${echapper(x)}</button>`).join("")}</div>
+ <div id="dailyExplication">${progression.jour.daily?"<p>Tu as déjà répondu à la question du jour !</p>":""}</div>
+ </div>`;
+}
+function repondreQuestionDuJour(index){
+ const q=questionsQuiz[indiceJour()%questionsQuiz.length],zone=document.getElementById("dailyExplication");
+ if(!zone||progression.jour.daily)return;
+ document.querySelectorAll("#quizZoneResultat .quiz-options button").forEach((b,i)=>{
+  b.disabled=true;if(i===q.reponse)b.classList.add("correct");if(i===index&&index!==q.reponse)b.classList.add("wrong");
+ });
+ zone.innerHTML=`<div class="quiz-result"><strong>${index===q.reponse?"✅ Exactement !":"❌ Mauvaise réponse !"}</strong><p>${echapper(q.explication)}</p><p>⭐ +15 XP pour ta participation quotidienne !</p></div>`;
+ terminerQuestionDuJour();
+}
+
+/* =========================
+   MISSIONS ET FAVORIS
+========================= */
+
+const ancienneChangerFavori=changerFavori;
+changerFavori=function(id){
+ const avant=estFavori(id);
+ ancienneChangerFavori(id);
+ if(!avant){
+  progression.jour.missionFavori=true;
+  ajouterXP(10);
+  sauvegarderProgression();
+ }
+};
+
+/* =========================
+   THÈME ET INITIALISATION
+========================= */
+
+function changerTheme(){
+ document.body.classList.toggle("light");
+ const clair=document.body.classList.contains("light");
+ document.getElementById("themeButton").textContent=clair?"🌙":"☀️";
+ try{localStorage.setItem("nexusTheme",clair?"light":"dark")}catch(e){}
+}
+try{
+ if(localStorage.getItem("nexusTheme")==="light"){
+  document.body.classList.add("light");
+  document.getElementById("themeButton").textContent="🌙";
+ }
+}catch(e){}
+
+verifierBadges();
+afficherUnivers();
+</script>
+</body>
+</html>
