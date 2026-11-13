@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -154,7 +154,7 @@ footer{text-align:center;padding:35px;color:var(--secondaire);font-size:13px;bor
  <nav>
   <button onclick="accueil()">Accueil</button>
   <button onclick="afficherProfil()">👤 Profil</button>
-  <button onclick="afficherFavoris()">♡ Favoris</button>
+  <button onclick="afficherFavoris()">♡ Favoris (<span id="nombreFavoris">0</span>)</button>
   <button onclick="afficherExploration()">🗺️ Explorer</button>
   <button onclick="afficherProgression()">🏆 Progression</button>
   <button onclick="changerTheme()" id="themeButton">☀️</button>
@@ -528,18 +528,47 @@ function actualiserMiniProgression(){
 ========================= */
 
 function estFavori(id){return favoris.includes(id)}
+
+function actualiserNombreFavoris(){
+ const zone=document.getElementById("nombreFavoris");
+ if(zone)zone.textContent=favoris.length;
+}
+
 function changerFavori(id){
  if(!trouverArticle(id))return;
- favoris=estFavori(id)?favoris.filter(x=>x!==id):[...favoris,id];
- sauvegarderFavoris();verifierBadges();
+
+ const etaitFavori=estFavori(id);
+
+ favoris=etaitFavori
+  ? favoris.filter(x=>x!==id)
+  : [...favoris,id];
+
+ sauvegarderFavoris();
+ actualiserNombreFavoris();
+ verifierBadges();
+
  const c=document.getElementById("contenu");
- if(c.dataset.page==="favoris"){afficherFavoris();return}
- if(c.dataset.page==="article"){afficherArticle(id);return}
- if(c.dataset.page==="recherche"){rechercher();return}
+
+ if(c.dataset.page==="favoris"){
+  afficherFavoris();
+  return;
+ }
+
+ if(c.dataset.page==="article"){
+  afficherArticle(id);
+  return;
+ }
+
+ if(c.dataset.page==="recherche"){
+  rechercher();
+  return;
+ }
+
  const h=c.querySelector("h2");
  const cle=themes.find(t=>t.nom===h?.textContent)?.id;
  if(cle)ouvrirUnivers(cle);
 }
+
 function creerCarte(a){
  return `<article class="card">
  <div class="category">${a.emoji} ${a.univers.toUpperCase()}</div>
@@ -550,7 +579,11 @@ function creerCarte(a){
   <button class="heart" onclick="changerFavori('${a.id}')">${estFavori(a.id)?"♥":"♡"}</button>
  </div></article>`;
 }
-function afficherCartes(liste){return `<div class="cards">${liste.map(creerCarte).join("")}</div>`}
+
+function afficherCartes(liste){
+ return `<div class="cards">${liste.map(creerCarte).join("")}</div>`;
+}
+
 function afficherUnivers(){
  document.getElementById("universes").innerHTML=themes.map(t=>{
   const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
@@ -560,20 +593,23 @@ function afficherUnivers(){
    <p style="margin-top:12px;color:var(--beige)">${lus}/100 découvertes lues</p>
   </div>`;
  }).join("");
- document.getElementById("total").textContent=tousLesArticles.length+" découvertes à explorer";
  actualiserMiniProgression();
  afficherCarteAccueil();
+ actualiserNombreFavoris();
 }
+
 function afficherContenu(html,page=""){
  document.getElementById("home").classList.add("hidden");
  const c=document.getElementById("contenu");
  c.classList.remove("hidden");c.dataset.page=page;c.innerHTML=html;
  window.scrollTo({top:0,behavior:"smooth"});
 }
+
 function ouvrirUnivers(cle){
  const u=univers[cle];if(!u)return;
  afficherContenu(`<div class="content-head"><h2>${u.emoji} ${u.nom}</h2><button onclick="accueil()">← Retour</button></div>${afficherCartes(u.articles)}`,"univers");
 }
+
 function afficherArticle(id){
  const a=typeof id==="string"?trouverArticle(id):id;if(!a)return;
  lireDecouverte(a.id);
@@ -593,25 +629,46 @@ function afficherArticle(id){
   <button onclick="changerFavori('${a.id}')" style="margin-top:15px">${estFavori(a.id)?"♥ Retirer des favoris":"♡ Ajouter aux favoris"}</button>
  </article>`,"article");
 }
+
 function retourUnivers(id){
  const a=trouverArticle(id),cle=themes.find(t=>t.nom===a?.univers)?.id;
  if(cle)ouvrirUnivers(cle);else accueil();
 }
+
+/* CORRECTION PRINCIPALE : les identifiants sont transformés en articles complets. */
 function afficherFavoris(){
- afficherContenu(`<div class="content-head"><h2>♡ Mes favoris</h2><button onclick="accueil()">← Retour</button></div>${favoris.length?afficherCartes(favoris):'<div class="empty">Tu n’as pas encore de favoris.</div>'}`,"favoris");
+ const articlesFavoris=favoris
+  .map(id=>trouverArticle(id))
+  .filter(article=>article!==null);
+
+ afficherContenu(`
+  <div class="content-head">
+   <h2>♡ Mes favoris (${articlesFavoris.length})</h2>
+   <button onclick="accueil()">← Retour</button>
+  </div>
+  ${articlesFavoris.length
+   ? afficherCartes(articlesFavoris)
+   : '<div class="empty">♡<br><br>Tu n’as pas encore de favoris.<br>Ajoute des découvertes avec le bouton cœur !</div>'}
+ `,"favoris");
 }
+
 function rechercher(){
  const mot=document.getElementById("recherche").value.trim().toLocaleLowerCase("fr");
  if(!mot){accueil();return}
  const r=tousLesArticles.filter(a=>(a.titre+" "+a.description+" "+a.texte+" "+a.univers).toLocaleLowerCase("fr").includes(mot));
  afficherContenu(`<div class="content-head"><h2>Résultats de recherche</h2><button onclick="accueil()">← Retour</button></div><p class="muted">${r.length} résultat(s) pour « ${echapper(mot)} »</p>${r.length?afficherCartes(r):'<div class="empty">Aucune découverte trouvée.</div>'}`,"recherche");
 }
-function decouverteAleatoire(){afficherArticle(tousLesArticles[Math.floor(Math.random()*tousLesArticles.length)])}
+
+function decouverteAleatoire(){
+ afficherArticle(tousLesArticles[Math.floor(Math.random()*tousLesArticles.length)]);
+}
+
 function accueil(){
  document.getElementById("contenu").classList.add("hidden");
  document.getElementById("home").classList.remove("hidden");
  document.getElementById("recherche").value="";
- actualiserMiniProgression();window.scrollTo({top:0,behavior:"smooth"});
+ actualiserMiniProgression();
+ window.scrollTo({top:0,behavior:"smooth"});
 }
 
 /* =========================
@@ -643,11 +700,13 @@ function afficherProfil(){
   </div>
  </div>`,"profil");
 }
+
 function enregistrerProfil(){
  const valeur=document.getElementById("pseudo").value.trim();
  if(!valeur){alert("Choisis un pseudo !");return}
  profil.pseudo=valeur;sauvegarderProfil();verifierBadges();afficherProfil();actualiserMiniProgression();
 }
+
 function choisirAvatar(a){
  profil.avatar=a;sauvegarderProfil();afficherProfil();actualiserMiniProgression();
 }
@@ -669,6 +728,7 @@ function afficherCarteAccueil(){
   </div>`;
  }).join("");
 }
+
 function afficherExploration(){
  afficherContenu(`
  <div class="content-head"><h2>🗺️ Carte d'exploration</h2><button onclick="accueil()">← Retour</button></div>
@@ -759,6 +819,7 @@ function afficherProgression(){
   <button onclick="reinitialiserProgression()">Réinitialiser ma progression</button>
  </section>`,"progression");
 }
+
 function reinitialiserProgression(){
  if(!confirm("Veux-tu vraiment remettre ta progression à zéro ?"))return;
  progression={xp:0,articles:[],quizTermines:0,meilleurQuiz:0,badges:[],jour:nouvelleJournee()};
@@ -793,10 +854,12 @@ const questionsQuiz=[
 ];
 
 let quizActuel=[],questionIndex=0,scoreQuiz=0,quizRepondu=false;
+
 function demarrerQuiz(){
  quizActuel=[...questionsQuiz].sort(()=>Math.random()-.5).slice(0,10);
  questionIndex=0;scoreQuiz=0;afficherQuestionQuiz();
 }
+
 function afficherQuestionQuiz(){
  const zone=document.getElementById("quizZoneResultat");if(!zone)return;
  if(questionIndex>=quizActuel.length){terminerQuiz();return}
@@ -806,6 +869,7 @@ function afficherQuestionQuiz(){
  <div class="quiz-options">${q.choix.map((x,i)=>`<button onclick="repondreQuiz(${i})">${echapper(x)}</button>`).join("")}</div>
  <div id="quizExplication"></div></div>`;
 }
+
 function repondreQuiz(index){
  if(quizRepondu)return;quizRepondu=true;
  const q=quizActuel[questionIndex],boutons=document.querySelectorAll("#quizZoneResultat .quiz-options button");
@@ -813,7 +877,9 @@ function repondreQuiz(index){
  boutons.forEach((b,i)=>{b.disabled=true;if(i===q.reponse)b.classList.add("correct");if(i===index&&index!==q.reponse)b.classList.add("wrong")});
  document.getElementById("quizExplication").innerHTML=`<div class="quiz-result"><strong>${index===q.reponse?"✅ Bonne réponse !":"❌ Pas tout à fait !"}</strong><p>${echapper(q.explication)}</p><button class="primary" onclick="questionSuivante()">${questionIndex===quizActuel.length-1?"Voir mon résultat":"Question suivante →"}</button></div>`;
 }
+
 function questionSuivante(){questionIndex++;afficherQuestionQuiz()}
+
 function terminerQuiz(){
  enregistrerQuiz(scoreQuiz);
  document.getElementById("quizZoneResultat").innerHTML=`<div class="quiz-result">
@@ -832,6 +898,7 @@ function terminerQuiz(){
 function indiceJour(){
  const d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
 }
+
 function afficherQuestionDuJour(){
  const zone=document.getElementById("quizZoneResultat");
  const q=questionsQuiz[indiceJour()%questionsQuiz.length];
@@ -843,6 +910,7 @@ function afficherQuestionDuJour(){
  <div id="dailyExplication">${progression.jour.daily?"<p>Tu as déjà répondu à la question du jour !</p>":""}</div>
  </div>`;
 }
+
 function repondreQuestionDuJour(index){
  const q=questionsQuiz[indiceJour()%questionsQuiz.length],zone=document.getElementById("dailyExplication");
  if(!zone||progression.jour.daily)return;
@@ -878,6 +946,7 @@ function changerTheme(){
  document.getElementById("themeButton").textContent=clair?"🌙":"☀️";
  try{localStorage.setItem("nexusTheme",clair?"light":"dark")}catch(e){}
 }
+
 try{
  if(localStorage.getItem("nexusTheme")==="light"){
   document.body.classList.add("light");
@@ -890,3 +959,4 @@ afficherUnivers();
 </script>
 </body>
 </html>
+```
