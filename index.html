@@ -1,149 +1,272 @@
-```html
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0915">
 <title>NEXUS — Explore le monde</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
 :root{
- --fond:#10101a;--surface:#191927;--surface2:#292536;
- --texte:#f4f0eb;--secondaire:#aaa6b7;
- --violet:#a78bfa;--rose:#d68bdc;
- --beige:#d6c3a5;--beige-clair:#eadcc7;
- --beige-fond:rgba(214,195,165,.12);
- --bordure:rgba(214,195,165,.28);
+ --bg:#0b0915;
+ --bg2:#110e20;
+ --surface:rgba(27,22,44,.86);
+ --surface2:#211a35;
+ --text:#f7f3ff;
+ --muted:#aaa2bd;
+ --purple:#a78bfa;
+ --pink:#ed8bdf;
+ --blue:#78aaff;
+ --gold:#e7c99c;
+ --border:rgba(190,157,255,.2);
+ --glow:rgba(167,139,250,.25);
+ --success:#65d6a0;
 }
 body.light{
- --fond:#f4f0e9;--surface:#fffdf9;--surface2:#eee8df;
- --texte:#292633;--secondaire:#77717b;
- --violet:#7954bb;--rose:#a45ca8;
- --beige:#b69a70;--beige-clair:#d6c3a5;
- --beige-fond:rgba(182,154,112,.13);
- --bordure:rgba(182,154,112,.4);
+ --bg:#f5f1fa;
+ --bg2:#eee8f7;
+ --surface:rgba(255,255,255,.9);
+ --surface2:#eee7f8;
+ --text:#211a30;
+ --muted:#756b86;
+ --purple:#7954bb;
+ --pink:#b65baf;
+ --blue:#477acb;
+ --gold:#a88754;
+ --border:rgba(121,84,187,.22);
+ --glow:rgba(121,84,187,.12);
+ --success:#218b5b;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
 body{
- background:var(--fond);color:var(--texte);
- font-family:Arial,sans-serif;min-height:100vh;transition:.25s
+ min-height:100vh;
+ background:
+ radial-gradient(ellipse at 15% 5%,rgba(120,75,210,.16),transparent 35%),
+ radial-gradient(ellipse at 90% 35%,rgba(220,100,200,.1),transparent 30%),
+ var(--bg);
+ color:var(--text);
+ font-family:Inter,Arial,sans-serif;
+ transition:background .3s,color .3s;
+ overflow-x:hidden;
 }
-header{
- display:flex;justify-content:space-between;align-items:center;
- padding:17px 6%;border-bottom:2px solid var(--beige);
- position:sticky;top:0;background:var(--fond);z-index:10;gap:15px
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+ opacity:.18;
+ background-image:radial-gradient(var(--purple) .7px,transparent .7px);
+ background-size:32px 32px;
+ mask-image:linear-gradient(to bottom,black,transparent 85%);
 }
-.logo{font-size:27px;font-weight:900;letter-spacing:2px}
-.logo span{color:var(--beige)}
-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button,input{font:inherit}
 button{
- border:1px solid var(--beige);background:var(--surface2);
- color:var(--texte);padding:10px 14px;border-radius:10px;
- cursor:pointer;font-weight:600;transition:.2s
+ color:var(--text);background:var(--surface2);
+ border:1px solid var(--border);padding:11px 15px;
+ border-radius:12px;cursor:pointer;font-weight:700;
+ transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;
 }
-button:hover{border-color:var(--beige-clair);background:var(--beige-fond);transform:translateY(-2px)}
-button:disabled{opacity:.65;cursor:default;transform:none}
+button:hover{
+ transform:translateY(-3px);
+ border-color:var(--purple);
+ box-shadow:0 8px 25px var(--glow);
+}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 button.primary{
- background:linear-gradient(120deg,#a78bfa,#d6c3a5);
- color:#17131d;border:none
+ color:white;border:0;
+ background:linear-gradient(110deg,#7654d8,#c15ac6);
+ box-shadow:0 5px 22px rgba(167,139,250,.22);
 }
-input,select{
- min-width:0;padding:13px;border-radius:10px;
- border:1px solid var(--beige);background:var(--surface);
- color:var(--texte);font-size:15px
+button.primary:hover{box-shadow:0 8px 30px rgba(190,120,255,.35)}
+input{
+ width:100%;padding:14px 16px;border-radius:12px;
+ border:1px solid var(--border);background:var(--surface);
+ color:var(--text);outline:none;
 }
-main{max-width:1250px;margin:auto;padding:35px 5%}
+input:focus{border-color:var(--purple);box-shadow:0 0 0 3px var(--glow)}
+header{
+ position:sticky;top:0;z-index:50;
+ display:flex;align-items:center;justify-content:space-between;
+ gap:20px;padding:15px 5%;
+ background:rgba(13,10,23,.82);
+ backdrop-filter:blur(18px);
+ border-bottom:1px solid var(--border);
+}
+body.light header{background:rgba(250,247,255,.85)}
+.logo{
+ font-size:27px;font-weight:900;letter-spacing:3px;
+ background:linear-gradient(100deg,#fff,var(--purple),var(--pink));
+ -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.logo span{color:var(--pink)}
+nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+nav button{font-size:12px;padding:10px 12px}
+nav button.active{border-color:var(--purple);background:var(--glow)}
+main{max-width:1320px;margin:auto;padding:35px 5% 65px}
+.hidden{display:none!important}
 .hero{
- text-align:center;padding:55px 15px 35px;
- background:linear-gradient(135deg,rgba(214,195,165,.12),rgba(167,139,250,.08));
- border:1px solid var(--beige);border-radius:24px;margin-bottom:25px
+ position:relative;overflow:hidden;text-align:center;
+ padding:85px 20px 65px;margin:10px 0 30px;
+ border:1px solid var(--border);border-radius:30px;
+ background:
+ radial-gradient(ellipse at 50% 0%,rgba(160,105,255,.25),transparent 60%),
+ linear-gradient(135deg,rgba(36,25,60,.95),rgba(18,15,32,.96));
+ box-shadow:0 25px 80px rgba(0,0,0,.22);
 }
-.eyebrow{color:var(--beige);letter-spacing:3px;font-size:12px;font-weight:bold}
-h1{font-size:clamp(34px,6vw,60px);margin:17px 0}
-h1 span{color:var(--beige)}
-.hero p{color:var(--secondaire);line-height:1.7}
-.search{display:flex;gap:10px;max-width:650px;margin:25px auto}
+body.light .hero{background:linear-gradient(135deg,#e9ddff,#fff0fb)}
+.hero:before,.hero:after{
+ content:"";position:absolute;border-radius:50%;filter:blur(2px);
+ pointer-events:none;
+}
+.hero:before{
+ width:300px;height:300px;left:-130px;top:-150px;
+ background:radial-gradient(circle,rgba(167,139,250,.24),transparent 70%);
+}
+.hero:after{
+ width:350px;height:350px;right:-150px;bottom:-220px;
+ background:radial-gradient(circle,rgba(237,139,223,.22),transparent 70%);
+}
+.hero-content{position:relative;z-index:1}
+.eyebrow{
+ color:var(--pink);font-size:11px;font-weight:800;
+ letter-spacing:4px;text-transform:uppercase;
+}
+h1{
+ font-size:clamp(38px,7vw,76px);font-weight:900;
+ letter-spacing:-3px;line-height:1.08;margin:23px 0;
+}
+.gradient-text{
+ background:linear-gradient(100deg,#c5a8ff,#f19ae4,#f4d4a2);
+ -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{max-width:680px;margin:0 auto;color:var(--muted);line-height:1.8}
+.hero-buttons{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:28px}
+.search{display:flex;gap:10px;max-width:650px;margin:28px auto 0}
 .search input{flex:1}
 .section-title{
- font-size:24px;margin:35px 0 20px;border-left:5px solid var(--beige);
- padding:8px 14px;background:var(--beige-fond);border-radius:0 10px 10px 0
+ display:flex;align-items:center;gap:12px;
+ font-size:23px;font-weight:800;margin:38px 0 19px;
 }
-.universes,.cards,.stats-grid,.badges,.missions,.profile-grid{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px
+.section-title:before{
+ content:"";width:5px;height:28px;border-radius:8px;
+ background:linear-gradient(var(--purple),var(--pink));
+ box-shadow:0 0 15px var(--glow);
 }
-.universe,.card,.panel,.stat-card,.badge-card,.mission,.profile-card{
- background:var(--surface);border:1px solid var(--bordure);
- border-radius:16px;padding:20px
+.stats-grid,.universes,.cards,.profile-grid,.badges,.missions{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;
 }
-.universe{cursor:pointer;transition:.2s}
-.universe:hover,.card:hover{transform:translateY(-4px);border-color:var(--beige)}
-.universe .emoji{font-size:32px}
-.universe h3{margin:12px 0 7px}
-.universe p,.card p,.muted{font-size:14px;color:var(--secondaire);line-height:1.6}
-.card{display:flex;flex-direction:column;min-height:220px}
-.card .category{font-size:11px;color:var(--beige);letter-spacing:1px}
-.card h3{margin:12px 0}
+.stat-card,.universe,.card,.panel,.badge-card,.mission,.profile-card,.article{
+ background:var(--surface);border:1px solid var(--border);
+ border-radius:19px;padding:21px;
+ backdrop-filter:blur(12px);
+ box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+.stat-card{text-align:center}
+.stat-card strong{display:block;font-size:28px;color:var(--purple);margin-bottom:6px}
+.stat-card span{font-size:12px;color:var(--muted)}
+.universe,.card{transition:transform .25s,border-color .25s,box-shadow .25s}
+.universe{cursor:pointer;position:relative;overflow:hidden}
+.universe:hover,.card:hover{
+ transform:translateY(-6px);border-color:var(--purple);
+ box-shadow:0 15px 35px var(--glow);
+}
+.universe .emoji{font-size:38px}
+.universe h3{font-size:19px;margin:13px 0 7px}
+.universe p,.card p,.muted{font-size:13px;color:var(--muted);line-height:1.7}
+.universe .count{margin-top:15px;color:var(--purple);font-weight:700}
+.card{display:flex;flex-direction:column;min-height:240px}
+.card .category{font-size:10px;letter-spacing:2px;color:var(--pink);font-weight:800}
+.card h3{font-size:17px;line-height:1.4;margin:12px 0}
 .card p{flex:1}
-.card-actions{display:flex;gap:8px;margin-top:15px}
-.card-actions button{flex:1}
-.heart{max-width:48px;color:var(--rose);font-size:19px}
+.card-actions{display:flex;gap:8px;margin-top:17px}
+.card-actions button{flex:1;font-size:12px}
+.heart{max-width:48px;color:var(--pink);font-size:19px}
 .content-head{
  display:flex;justify-content:space-between;align-items:center;
- flex-wrap:wrap;gap:12px;margin-bottom:20px
+ flex-wrap:wrap;gap:12px;margin-bottom:23px;
 }
-.content-head h2{border-left:5px solid var(--beige);padding-left:12px}
-.article{
- max-width:850px;margin:auto;background:var(--surface);
- border:2px solid var(--beige);padding:30px;border-radius:18px
-}
-.article h2{font-size:30px;margin:15px 0}
-.article p{color:var(--secondaire);line-height:1.8;margin:15px 0}
-.article-text{color:var(--texte);font-size:16px;line-height:1.9;margin-top:20px}
-.article-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.pill{
- display:inline-block;padding:7px 11px;border:1px solid var(--bordure);
- border-radius:20px;color:var(--beige);font-size:12px
-}
-.hidden{display:none!important}
-.empty{text-align:center;color:var(--secondaire);padding:40px}
-.panel{margin-top:22px}
-.panel h2,.panel h3{color:var(--beige);margin-bottom:12px}
+.content-head h2{font-size:25px}
+.panel{margin-top:20px}
+.panel h2,.panel h3{margin-bottom:12px}
+.panel h2{color:var(--purple)}
 .progress-top{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
-.level-number{font-size:38px;font-weight:bold;color:var(--beige)}
-.xp-bar{height:15px;background:var(--surface2);border-radius:20px;overflow:hidden;margin:15px 0}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--rose),var(--beige));transition:width .4s}
-.stat-card{text-align:center}
-.stat-card strong{display:block;font-size:27px;color:var(--beige);margin-bottom:7px}
-.badge-card{text-align:center}
-.badge-card .badge-icon{font-size:32px;margin-bottom:8px}
-.badge-card p{font-size:12px;color:var(--secondaire);margin-top:7px}
-.badge-card.locked{opacity:.4;filter:grayscale(1)}
-.mission{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.mission.done{border-color:#54bd83}
-.mission small{color:var(--secondaire)}
-.profile-card{text-align:center}
-.avatar{font-size:65px;margin-bottom:10px}
-.profile-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
-.profile-form input{flex:1}
-.map-line{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:15px}
-.map-node{
- flex:1;min-width:130px;padding:15px;background:var(--surface2);
- border:1px solid var(--beige);border-radius:13px;text-align:center
+.level-number{font-size:31px;font-weight:900;margin-top:6px}
+.xp-bar{height:11px;background:var(--surface2);border-radius:20px;overflow:hidden;margin:14px 0}
+.xp-fill{
+ height:100%;width:0;border-radius:20px;
+ background:linear-gradient(90deg,var(--purple),var(--pink),var(--gold));
+ box-shadow:0 0 12px var(--glow);transition:width .5s;
 }
-.map-node strong{display:block;margin:7px 0}
-.quiz-question{font-size:21px;font-weight:bold;margin:20px 0}
-.quiz-options{display:grid;gap:10px}
-.quiz-options button{text-align:left;padding:14px}
-.correct{border-color:#54bd83!important;background:rgba(84,189,131,.15)!important}
-.wrong{border-color:#df7777!important;background:rgba(223,119,119,.15)!important}
-.quiz-result{margin-top:15px;padding:18px;background:var(--surface2);border-radius:12px}
-footer{text-align:center;padding:35px;color:var(--secondaire);font-size:13px;border-top:1px solid var(--beige);margin-top:30px}
-@media(max-width:650px){
- header{padding:15px 4%;align-items:flex-start;flex-direction:column}
+.pill{
+ display:inline-block;padding:7px 11px;border:1px solid var(--border);
+ border-radius:30px;color:var(--purple);font-size:11px;margin:4px 4px 4px 0;
+}
+.article{max-width:850px;margin:auto;padding:35px}
+.article h2{font-size:32px;margin:17px 0}
+.article p{color:var(--muted);line-height:1.8;margin:13px 0}
+.article-text{font-size:16px;line-height:2;color:var(--text);margin-top:25px}
+.article-meta{margin:18px 0}
+.empty{text-align:center;padding:55px 15px;color:var(--muted);line-height:2}
+.profile-card{text-align:center}
+.avatar{font-size:70px;margin:12px}
+.profile-form{display:flex;gap:10px;margin-top:15px}
+.profile-form input{flex:1}
+.avatar-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.avatar-list button{font-size:25px}
+.map-line{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:13px;margin-top:18px}
+.map-node{
+ background:var(--surface2);border:1px solid var(--border);
+ border-radius:15px;padding:17px;text-align:center;
+}
+.map-node strong{display:block;margin:8px 0}
+.badge-card{text-align:center}
+.badge-icon{font-size:34px;margin-bottom:10px}
+.badge-card p{font-size:12px;color:var(--muted);margin-top:7px}
+.badge-card.locked{opacity:.38;filter:grayscale(1)}
+.mission{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mission small{color:var(--muted)}
+.mission.done{border-color:var(--success)}
+.quiz-box{
+ margin-top:20px;padding:22px;border-radius:18px;
+ background:var(--surface2);border:1px solid var(--border);
+}
+.quiz-question{font-size:21px;font-weight:800;line-height:1.5;margin:20px 0}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.quiz-options button{text-align:left;padding:15px}
+.correct{border-color:var(--success)!important;background:rgba(70,190,130,.14)!important}
+.wrong{border-color:#e7778c!important;background:rgba(220,80,110,.13)!important}
+.quiz-result{margin-top:16px;padding:17px;border-radius:13px;background:var(--surface)}
+footer{
+ text-align:center;padding:32px 15px;color:var(--muted);
+ border-top:1px solid var(--border);font-size:12px;
+}
+footer strong{color:var(--purple)}
+.toast{
+ position:fixed;bottom:25px;left:50%;transform:translate(-50%,20px);
+ background:var(--surface2);border:1px solid var(--purple);
+ color:var(--text);padding:14px 20px;border-radius:14px;
+ opacity:0;pointer-events:none;transition:.3s;z-index:100;
+ box-shadow:0 10px 35px var(--glow);
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
+.about-item{padding:20px;border:1px solid var(--border);border-radius:15px;background:var(--surface2)}
+.about-item strong{display:block;color:var(--purple);margin-bottom:8px}
+@media(max-width:760px){
+ header{align-items:flex-start;flex-direction:column;padding:14px 4%}
+ nav{width:100%}
+ nav button{flex:1}
  main{padding:25px 4%}
+ .hero{padding:60px 17px 45px}
+ h1{letter-spacing:-1.5px}
  .search{flex-direction:column}
+ .quiz-options{grid-template-columns:1fr}
  .article{padding:22px}
- nav button{padding:9px}
+ .profile-form{flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
 </style>
 </head>
@@ -152,11 +275,12 @@ footer{text-align:center;padding:35px;color:var(--secondaire);font-size:13px;bor
 <header>
  <div class="logo">NEXUS<span>.</span></div>
  <nav>
-  <button onclick="accueil()">Accueil</button>
+  <button onclick="accueil()">⌂ Accueil</button>
   <button onclick="afficherProfil()">👤 Profil</button>
-  <button onclick="afficherFavoris()">♡ Favoris (<span id="nombreFavoris">0</span>)</button>
-  <button onclick="afficherExploration()">🗺️ Explorer</button>
+  <button onclick="afficherFavoris()">♡ Favoris <span id="nombreFavoris">0</span></button>
+  <button onclick="afficherExploration()">🗺 Explorer</button>
   <button onclick="afficherProgression()">🏆 Progression</button>
+  <button onclick="afficherAPropos()">✦ À propos</button>
   <button onclick="changerTheme()" id="themeButton">☀️</button>
  </nav>
 </header>
@@ -164,46 +288,64 @@ footer{text-align:center;padding:35px;color:var(--secondaire);font-size:13px;bor
 <main>
 <section id="home">
  <div class="hero">
-  <div class="eyebrow">APPRENDS • EXPLORE • DÉCOUVRE</div>
-  <h1>Explore le monde avec <span>NEXUS.</span></h1>
-  <p>500 découvertes, des quiz, des missions et des récompenses pour nourrir ta curiosité.</p>
-  <div class="search">
-   <input id="recherche" placeholder="Rechercher une découverte..." onkeydown="if(event.key==='Enter')rechercher()">
-   <button class="primary" onclick="rechercher()">Rechercher</button>
+  <div class="hero-content">
+   <div class="eyebrow">✦ Le portail de la curiosité ✦</div>
+   <h1>Le monde est plein de<br><span class="gradient-text">secrets à découvrir.</span></h1>
+   <p>Bienvenue sur NEXUS. Explore cinq univers, découvre des faits fascinants, relève des défis et construis ta propre collection de connaissances.</p>
+   <div class="search">
+    <input id="recherche" placeholder="🔎 Rechercher une découverte..." onkeydown="if(event.key==='Enter')rechercher()">
+    <button class="primary" onclick="rechercher()">Explorer</button>
+   </div>
+   <div class="hero-buttons">
+    <button class="primary" onclick="decouverteAleatoire()">🎲 Surprise-moi</button>
+    <button onclick="demarrerQuiz()">🧠 Lancer un quiz</button>
+   </div>
   </div>
-  <button onclick="decouverteAleatoire()">🎲 Découverte aléatoire</button>
  </div>
 
  <div id="miniProgression"></div>
- <h2 class="section-title">🌍 Explore les univers</h2>
+
+ <h2 class="section-title">Les univers NEXUS</h2>
  <div class="universes" id="universes"></div>
 
- <h2 class="section-title">🗺️ Carte d'exploration</h2>
+ <h2 class="section-title">Ta carte d'exploration</h2>
  <div class="panel">
-  <p class="muted">Parcours les cinq univers et complète ta collection de découvertes.</p>
+  <p class="muted">Chaque univers représente un territoire de connaissances. Explore-les tous pour compléter ta carte.</p>
   <div id="carteExploration" class="map-line"></div>
  </div>
 
- <section class="panel">
-  <h2>🧠 Le coin des défis</h2>
-  <p class="muted">Teste tes connaissances avec des questions sur les cinq univers.</p>
+ <h2 class="section-title">Le coin des défis</h2>
+ <div class="panel">
+  <h2>🧠 Prêt à tester tes connaissances ?</h2>
+  <p class="muted">Réponds à dix questions et gagne de l'expérience selon ton score.</p>
   <div class="card-actions">
    <button class="primary" onclick="demarrerQuiz()">🎮 Commencer un quiz</button>
    <button onclick="afficherQuestionDuJour()">📅 Question du jour</button>
   </div>
   <div id="quizZoneResultat"></div>
- </section>
+ </div>
+
+ <h2 class="section-title">Pourquoi NEXUS ?</h2>
+ <div class="about-grid">
+  <div class="about-item"><strong>🌌 Explorer</strong><p class="muted">Parcours des univers très différents et découvre de nouveaux sujets.</p></div>
+  <div class="about-item"><strong>🧠 Apprendre</strong><p class="muted">Lis des fiches courtes et teste tes connaissances avec des quiz.</p></div>
+  <div class="about-item"><strong>🏆 Progresser</strong><p class="muted">Gagne de l'XP, monte de niveau et débloque des badges.</p></div>
+ </div>
 </section>
 
 <section id="contenu" class="hidden"></section>
 </main>
 
-<footer>NEXUS © 2026 — Le savoir n'a pas de limites.</footer>
+<footer>
+ <strong>NEXUS</strong> © 2026 — Le savoir n'a pas de limites.<br>
+ Un projet personnel réalisé en HTML, CSS et JavaScript.
+</footer>
+<div id="toast" class="toast"></div>
 
 <script>
-/* =========================
-   UNIVERS ET DÉCOUVERTES
-========================= */
+/* ==================================================
+   1. UNIVERS ET BASE DE DONNÉES
+================================================== */
 
 const themes=[
  {id:"espace",nom:"Espace",emoji:"🚀",description:"Planètes, étoiles et galaxies"},
@@ -377,11 +519,14 @@ gaming:[
 ]
 };
 
-const univers={},tousLesArticles=[];
+const univers={};
+const tousLesArticles=[];
 themes.forEach(theme=>{
- const liste=sujets[theme.id],articles=[];
+ const articles=[];
+ const liste=sujets[theme.id];
  for(let i=0;i<100;i++){
-  const sujet=liste[i%liste.length],repetition=Math.floor(i/liste.length);
+  const sujet=liste[i%liste.length];
+  const repetition=Math.floor(i/liste.length);
   let titre=sujet[0],description=sujet[1],texte=sujet[2];
   if(repetition>0){
    titre+=" — approfondissement "+repetition;
@@ -399,34 +544,43 @@ themes.forEach(theme=>{
  tousLesArticles.push(...articles);
 });
 
-/* =========================
-   SAUVEGARDE ET PROFIL
-========================= */
+/* ==================================================
+   2. SAUVEGARDES
+================================================== */
 
 function chargerJSON(cle,defaut){
- try{return JSON.parse(localStorage.getItem(cle))??defaut}catch(e){return defaut}
+ try{
+  const valeur=JSON.parse(localStorage.getItem(cle));
+  return valeur??defaut;
+ }catch(e){return defaut}
 }
 function sauvegarder(cle,valeur){
  try{localStorage.setItem(cle,JSON.stringify(valeur))}catch(e){}
 }
 function echapper(s){
- return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ return String(s).replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
 function dateLocale(){
  const d=new Date();
  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
 function nouvelleJournee(){
- return {date:dateLocale(),lectures:0,quiz:false,daily:false,missionQuiz:false,missionFavori:false};
+ return {date:dateLocale(),lectures:0,quiz:false,daily:false,missionFavori:false,lecturesRecompense:false};
 }
 
-let profil=chargerJSON("nexusProfil",{
- pseudo:"Explorateur",avatar:"🧑‍🚀"
-});
-let favoris=chargerJSON("nexusFavoris",[]).filter(id=>tousLesArticles.some(a=>a.id===id));
+let profil=chargerJSON("nexusProfil",{pseudo:"Explorateur",avatar:"🧑‍🚀"});
+if(!profil||typeof profil!=="object")profil={pseudo:"Explorateur",avatar:"🧑‍🚀"};
+
+let favoris=chargerJSON("nexusFavoris",[]);
+if(!Array.isArray(favoris))favoris=[];
+favoris=favoris.filter(id=>tousLesArticles.some(a=>a.id===id));
+
 let progression=chargerJSON("nexusProgression",{
  xp:0,articles:[],quizTermines:0,meilleurQuiz:0,badges:[],jour:nouvelleJournee()
 });
+if(!progression||typeof progression!=="object")progression={xp:0,articles:[],quizTermines:0,meilleurQuiz:0,badges:[],jour:nouvelleJournee()};
 if(!Array.isArray(progression.articles))progression.articles=[];
 if(!Array.isArray(progression.badges))progression.badges=[];
 if(!progression.jour||progression.jour.date!==dateLocale())progression.jour=nouvelleJournee();
@@ -437,10 +591,44 @@ function sauvegarderProgression(){sauvegarder("nexusProgression",progression)}
 function trouverArticle(id){return tousLesArticles.find(a=>a.id===id)||null}
 function niveau(){return Math.floor(progression.xp/100)+1}
 function xpNiveau(){return progression.xp%100}
+function estFavori(id){return favoris.includes(id)}
 
-/* =========================
-   XP, BADGES ET MISSIONS
-========================= */
+/* ==================================================
+   3. NOTIFICATIONS ET NAVIGATION
+================================================== */
+
+let toastTimer;
+function notifier(message){
+ const zone=document.getElementById("toast");
+ zone.textContent=message;
+ zone.classList.add("show");
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>zone.classList.remove("show"),2600);
+}
+function afficherContenu(html,page=""){
+ document.getElementById("home").classList.add("hidden");
+ const c=document.getElementById("contenu");
+ c.classList.remove("hidden");
+ c.dataset.page=page;
+ c.innerHTML=html;
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function accueil(){
+ document.getElementById("contenu").classList.add("hidden");
+ document.getElementById("home").classList.remove("hidden");
+ const recherche=document.getElementById("recherche");
+ if(recherche)recherche.value="";
+ actualiserMiniProgression();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function actualiserNombreFavoris(){
+ const zone=document.getElementById("nombreFavoris");
+ if(zone)zone.textContent=favoris.length;
+}
+
+/* ==================================================
+   4. XP, BADGES ET MISSIONS
+================================================== */
 
 const badgesDef=[
  {id:"premiere",nom:"Première découverte",icone:"🌟",description:"Lire ta première découverte.",condition:p=>p.articles.length>=1},
@@ -450,24 +638,23 @@ const badgesDef=[
  {id:"quiz",nom:"Premier quiz",icone:"🧠",description:"Terminer un quiz.",condition:p=>p.quizTermines>=1},
  {id:"genie",nom:"Petit génie",icone:"💡",description:"Obtenir au moins 8/10 à un quiz.",condition:p=>p.meilleurQuiz>=8},
  {id:"perfect",nom:"Sans faute",icone:"🏆",description:"Obtenir 10/10 à un quiz.",condition:p=>p.meilleurQuiz===10},
- {id:"univers",nom:"Grand explorateur",icone:"🌌",description:"Lire une découverte dans chaque univers.",condition:p=>themes.every(t=>p.articles.some(id=>id.startsWith(t.id+"-")))},
+ {id:"univers",nom:"Grand explorateur",icone:"🌌",description:"Lire dans chaque univers.",condition:p=>themes.every(t=>p.articles.some(id=>id.startsWith(t.id+"-")))},
  {id:"collection",nom:"Collectionneur",icone:"❤️",description:"Ajouter 10 favoris.",condition:()=>favoris.length>=10},
  {id:"niveau5",nom:"En progression",icone:"🚀",description:"Atteindre le niveau 5.",condition:p=>p.xp>=400},
  {id:"profil",nom:"Identité NEXUS",icone:"👤",description:"Personnaliser ton profil.",condition:()=>profil.pseudo!=="Explorateur"},
- {id:"missions",nom:"Mission accomplie",icone:"🎯",description:"Terminer une mission quotidienne.",condition:p=>p.jour.lecturesRecompense||p.jour.quiz||p.jour.daily}
+ {id:"missions",nom:"Mission accomplie",icone:"🎯",description:"Terminer une mission quotidienne.",condition:p=>p.jour.lecturesRecompense||p.jour.quiz||p.jour.daily||p.jour.missionFavori}
 ];
 
 function verifierBadges(){
  let nouveaux=[];
  badgesDef.forEach(b=>{
   if(!progression.badges.includes(b.id)&&b.condition(progression)){
-   progression.badges.push(b.id);nouveaux.push(b);
+   progression.badges.push(b.id);
+   nouveaux.push(b);
   }
  });
  sauvegarderProgression();
- if(nouveaux.length){
-  nouveaux.forEach(b=>alert("🎖️ Badge débloqué : "+b.icone+" "+b.nom+" !"));
- }
+ nouveaux.forEach(b=>notifier("🏅 Badge débloqué : "+b.nom));
 }
 function ajouterXP(nombre){
  progression.xp+=nombre;
@@ -487,7 +674,7 @@ function verifierObjectifLectures(){
  if(progression.jour.lectures>=5&&!progression.jour.lecturesRecompense){
   progression.jour.lecturesRecompense=true;
   ajouterXP(25);
-  alert("🎯 Mission terminée : 5 découvertes lues ! +25 XP");
+  notifier("🎯 Mission terminée : +25 XP !");
  }
 }
 function enregistrerQuiz(score){
@@ -498,8 +685,6 @@ function enregistrerQuiz(score){
   progression.jour.quiz=true;
   ajouterXP(20);
  }
- progression.jour.missionQuiz=true;
- verifierBadges();
  sauvegarderProgression();
 }
 function terminerQuestionDuJour(){
@@ -514,247 +699,224 @@ function actualiserMiniProgression(){
  zone.innerHTML=`
  <section class="panel">
   <div class="progress-top">
-   <div><p class="eyebrow">BON RETOUR, ${echapper(profil.pseudo.toUpperCase())}</p>
-   <div class="level-number">${profil.avatar} Niveau ${niveau()}</div></div>
+   <div>
+    <p class="eyebrow">BON RETOUR, ${echapper(profil.pseudo.toUpperCase())}</p>
+    <div class="level-number">${profil.avatar} Niveau ${niveau()}</div>
+   </div>
    <div><strong>${progression.xp} XP</strong><p class="muted">Encore ${100-xpNiveau()} XP pour le niveau suivant</p></div>
   </div>
   <div class="xp-bar"><div class="xp-fill" style="width:${xpNiveau()}%"></div></div>
-  <p class="muted">${progression.articles.length} découvertes lues · ${progression.badges.length}/${badgesDef.length} badges</p>
+  <p class="muted">${progression.articles.length} découvertes lues · ${progression.badges.length}/${badgesDef.length} badges débloqués</p>
  </section>`;
 }
 
-/* =========================
-   AFFICHAGE DES DÉCOUVERTES
-========================= */
-
-function estFavori(id){return favoris.includes(id)}
-
-function actualiserNombreFavoris(){
- const zone=document.getElementById("nombreFavoris");
- if(zone)zone.textContent=favoris.length;
-}
-
-function changerFavori(id){
- if(!trouverArticle(id))return;
-
- const etaitFavori=estFavori(id);
-
- favoris=etaitFavori
-  ? favoris.filter(x=>x!==id)
-  : [...favoris,id];
-
- sauvegarderFavoris();
- actualiserNombreFavoris();
- verifierBadges();
-
- const c=document.getElementById("contenu");
-
- if(c.dataset.page==="favoris"){
-  afficherFavoris();
-  return;
- }
-
- if(c.dataset.page==="article"){
-  afficherArticle(id);
-  return;
- }
-
- if(c.dataset.page==="recherche"){
-  rechercher();
-  return;
- }
-
- const h=c.querySelector("h2");
- const cle=themes.find(t=>t.nom===h?.textContent)?.id;
- if(cle)ouvrirUnivers(cle);
-}
+/* ==================================================
+   5. CARTES ET DÉCOUVERTES
+================================================== */
 
 function creerCarte(a){
  return `<article class="card">
- <div class="category">${a.emoji} ${a.univers.toUpperCase()}</div>
- <h3>${echapper(a.titre)}</h3>
- <p>${echapper(a.description)}</p>
- <div class="card-actions">
-  <button class="primary" onclick="afficherArticle('${a.id}')">Découvrir →</button>
-  <button class="heart" onclick="changerFavori('${a.id}')">${estFavori(a.id)?"♥":"♡"}</button>
- </div></article>`;
+  <div class="category">${a.emoji} ${a.univers.toUpperCase()}</div>
+  <h3>${echapper(a.titre)}</h3>
+  <p>${echapper(a.description)}</p>
+  <div class="card-actions">
+   <button class="primary" onclick="afficherArticle('${a.id}')">Découvrir →</button>
+   <button class="heart" aria-label="Ajouter aux favoris" onclick="changerFavori('${a.id}')">${estFavori(a.id)?"♥":"♡"}</button>
+  </div>
+ </article>`;
 }
-
 function afficherCartes(liste){
  return `<div class="cards">${liste.map(creerCarte).join("")}</div>`;
 }
-
 function afficherUnivers(){
  document.getElementById("universes").innerHTML=themes.map(t=>{
   const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
   return `<div class="universe" onclick="ouvrirUnivers('${t.id}')">
-   <div class="emoji">${t.emoji}</div><h3>${t.nom}</h3>
+   <div class="emoji">${t.emoji}</div>
+   <h3>${t.nom}</h3>
    <p>${t.description}</p>
-   <p style="margin-top:12px;color:var(--beige)">${lus}/100 découvertes lues</p>
+   <p class="count">${lus}/100 découvertes lues</p>
   </div>`;
  }).join("");
  actualiserMiniProgression();
  afficherCarteAccueil();
  actualiserNombreFavoris();
 }
-
-function afficherContenu(html,page=""){
- document.getElementById("home").classList.add("hidden");
- const c=document.getElementById("contenu");
- c.classList.remove("hidden");c.dataset.page=page;c.innerHTML=html;
- window.scrollTo({top:0,behavior:"smooth"});
-}
-
 function ouvrirUnivers(cle){
- const u=univers[cle];if(!u)return;
- afficherContenu(`<div class="content-head"><h2>${u.emoji} ${u.nom}</h2><button onclick="accueil()">← Retour</button></div>${afficherCartes(u.articles)}`,"univers");
+ const u=univers[cle];
+ if(!u)return;
+ afficherContenu(`
+  <div class="content-head"><h2>${u.emoji} ${u.nom}</h2><button onclick="accueil()">← Retour</button></div>
+  <p class="muted" style="margin-bottom:20px">${u.description} · ${u.articles.length} fiches à explorer</p>
+  ${afficherCartes(u.articles)}
+ `,"univers");
 }
-
 function afficherArticle(id){
- const a=typeof id==="string"?trouverArticle(id):id;if(!a)return;
+ const a=typeof id==="string"?trouverArticle(id):id;
+ if(!a)return;
  lireDecouverte(a.id);
  afficherContenu(`
- <article class="article">
-  <button onclick="retourUnivers('${a.id}')">← Retour</button>
-  <p class="category">${a.emoji} ${a.univers.toUpperCase()}</p>
-  <h2 data-article-id="${a.id}">${echapper(a.titre)}</h2>
-  <p>${echapper(a.description)}</p>
-  <div class="article-meta">
-   <span class="pill">📚 ${a.difficulte}</span>
-   <span class="pill">⏱️ ${a.lecture} min de lecture</span>
-   <span class="pill">⭐ +10 XP à la première lecture</span>
-  </div>
-  <div class="article-text">${echapper(a.texte)}</div>
-  <p style="color:var(--beige)">⭐ ${progression.articles.includes(a.id)?"Découverte enregistrée":"Découverte"}</p>
-  <button onclick="changerFavori('${a.id}')" style="margin-top:15px">${estFavori(a.id)?"♥ Retirer des favoris":"♡ Ajouter aux favoris"}</button>
- </article>`,"article");
+  <article class="article">
+   <button onclick="retourUnivers('${a.id}')">← Retour à l'univers</button>
+   <p class="category" style="margin-top:25px">${a.emoji} ${a.univers.toUpperCase()}</p>
+   <h2>${echapper(a.titre)}</h2>
+   <p>${echapper(a.description)}</p>
+   <div class="article-meta">
+    <span class="pill">📚 ${a.difficulte}</span>
+    <span class="pill">⏱️ ${a.lecture} min de lecture</span>
+    <span class="pill">⭐ +10 XP à la première lecture</span>
+   </div>
+   <div class="article-text">${echapper(a.texte)}</div>
+   <p style="color:var(--purple)">✦ ${progression.articles.includes(a.id)?"Découverte enregistrée dans ta progression":"Découverte"}</p>
+   <button onclick="changerFavori('${a.id}')" style="margin-top:15px">${estFavori(a.id)?"♥ Retirer des favoris":"♡ Ajouter aux favoris"}</button>
+  </article>
+ `,"article");
 }
-
 function retourUnivers(id){
- const a=trouverArticle(id),cle=themes.find(t=>t.nom===a?.univers)?.id;
+ const a=trouverArticle(id);
+ const cle=themes.find(t=>t.nom===a?.univers)?.id;
  if(cle)ouvrirUnivers(cle);else accueil();
 }
-
-/* CORRECTION PRINCIPALE : les identifiants sont transformés en articles complets. */
+function changerFavori(id){
+ if(!trouverArticle(id))return;
+ const deja=estFavori(id);
+ favoris=deja?favoris.filter(x=>x!==id):[...favoris,id];
+ sauvegarderFavoris();
+ actualiserNombreFavoris();
+ if(!deja&&!progression.jour.missionFavori){
+  progression.jour.missionFavori=true;
+  ajouterXP(10);
+  notifier("❤️ Favori ajouté : +10 XP !");
+ }
+ verifierBadges();
+ const page=document.getElementById("contenu").dataset.page;
+ if(page==="favoris"){afficherFavoris();return}
+ if(page==="article"){afficherArticle(id);return}
+ if(page==="recherche"){rechercher();return}
+ if(page==="univers"){
+  const titre=document.querySelector("#contenu .content-head h2")?.textContent;
+  const theme=themes.find(t=>titre?.includes(t.nom));
+  if(theme)ouvrirUnivers(theme.id);
+ }
+}
 function afficherFavoris(){
- const articlesFavoris=favoris
-  .map(id=>trouverArticle(id))
-  .filter(article=>article!==null);
-
+ const liste=favoris.map(trouverArticle).filter(Boolean);
  afficherContenu(`
-  <div class="content-head">
-   <h2>♡ Mes favoris (${articlesFavoris.length})</h2>
-   <button onclick="accueil()">← Retour</button>
-  </div>
-  ${articlesFavoris.length
-   ? afficherCartes(articlesFavoris)
-   : '<div class="empty">♡<br><br>Tu n’as pas encore de favoris.<br>Ajoute des découvertes avec le bouton cœur !</div>'}
+  <div class="content-head"><h2>♡ Mes favoris (${liste.length})</h2><button onclick="accueil()">← Retour</button></div>
+  ${liste.length?afficherCartes(liste):'<div class="empty">♡<br>Tu n’as pas encore de favoris.<br>Ajoute des découvertes avec le bouton cœur !</div>'}
  `,"favoris");
 }
-
 function rechercher(){
  const mot=document.getElementById("recherche").value.trim().toLocaleLowerCase("fr");
  if(!mot){accueil();return}
- const r=tousLesArticles.filter(a=>(a.titre+" "+a.description+" "+a.texte+" "+a.univers).toLocaleLowerCase("fr").includes(mot));
- afficherContenu(`<div class="content-head"><h2>Résultats de recherche</h2><button onclick="accueil()">← Retour</button></div><p class="muted">${r.length} résultat(s) pour « ${echapper(mot)} »</p>${r.length?afficherCartes(r):'<div class="empty">Aucune découverte trouvée.</div>'}`,"recherche");
+ const resultats=tousLesArticles.filter(a=>
+  (a.titre+" "+a.description+" "+a.texte+" "+a.univers).toLocaleLowerCase("fr").includes(mot)
+ );
+ afficherContenu(`
+  <div class="content-head"><h2>🔎 Résultats de recherche</h2><button onclick="accueil()">← Retour</button></div>
+  <p class="muted" style="margin-bottom:20px">${resultats.length} résultat(s) pour « ${echapper(mot)} »</p>
+  ${resultats.length?afficherCartes(resultats):'<div class="empty">Aucune découverte trouvée.<br>Essaie un autre mot-clé.</div>'}
+ `,"recherche");
 }
-
 function decouverteAleatoire(){
  afficherArticle(tousLesArticles[Math.floor(Math.random()*tousLesArticles.length)]);
 }
 
-function accueil(){
- document.getElementById("contenu").classList.add("hidden");
- document.getElementById("home").classList.remove("hidden");
- document.getElementById("recherche").value="";
- actualiserMiniProgression();
- window.scrollTo({top:0,behavior:"smooth"});
-}
-
-/* =========================
-   PROFIL
-========================= */
+/* ==================================================
+   6. PROFIL
+================================================== */
 
 function afficherProfil(){
  const avatars=["🧑‍🚀","🧑‍💻","🧙","🦊","🐼","🐺","🐉","👾","🤖","🦉","🦁","🐸"];
  afficherContenu(`
- <div class="content-head"><h2>👤 Mon profil</h2><button onclick="accueil()">← Retour</button></div>
- <div class="profile-grid">
-  <div class="profile-card">
-   <div class="avatar">${profil.avatar}</div>
-   <h2>${echapper(profil.pseudo)}</h2>
-   <p class="muted">Explorateur NEXUS · Niveau ${niveau()}</p>
-   <div class="level-number">${progression.xp} XP</div>
-  </div>
-  <div class="panel">
-   <h2>Personnaliser mon profil</h2>
-   <label for="pseudo">Ton pseudo</label>
-   <div class="profile-form">
-    <input id="pseudo" maxlength="20" value="${echapper(profil.pseudo)}" placeholder="Ton pseudo">
-    <button class="primary" onclick="enregistrerProfil()">Enregistrer</button>
+  <div class="content-head"><h2>👤 Mon profil</h2><button onclick="accueil()">← Retour</button></div>
+  <div class="profile-grid">
+   <div class="profile-card">
+    <div class="avatar">${profil.avatar}</div>
+    <h2>${echapper(profil.pseudo)}</h2>
+    <p class="muted">Explorateur NEXUS · Niveau ${niveau()}</p>
+    <div class="level-number">${progression.xp} XP</div>
+    <div class="xp-bar"><div class="xp-fill" style="width:${xpNiveau()}%"></div></div>
    </div>
-   <h3 style="margin-top:20px">Choisir un avatar</h3>
-   <div class="card-actions" style="flex-wrap:wrap">
-    ${avatars.map(a=>`<button onclick="choisirAvatar('${a}')" style="font-size:24px">${a}</button>`).join("")}
+   <div class="panel">
+    <h2>Personnaliser mon profil</h2>
+    <label for="pseudo">Ton pseudo</label>
+    <div class="profile-form">
+     <input id="pseudo" maxlength="20" value="${echapper(profil.pseudo)}" placeholder="Ton pseudo">
+     <button class="primary" onclick="enregistrerProfil()">Enregistrer</button>
+    </div>
+    <h3 style="margin-top:25px">Choisir un avatar</h3>
+    <div class="avatar-list">
+     ${avatars.map(a=>`<button onclick="choisirAvatar('${a}')">${a}</button>`).join("")}
+    </div>
    </div>
   </div>
- </div>`,"profil");
+ `,"profil");
 }
-
 function enregistrerProfil(){
  const valeur=document.getElementById("pseudo").value.trim();
- if(!valeur){alert("Choisis un pseudo !");return}
- profil.pseudo=valeur;sauvegarderProfil();verifierBadges();afficherProfil();actualiserMiniProgression();
+ if(!valeur){notifier("Choisis un pseudo !");return}
+ profil.pseudo=valeur;
+ sauvegarderProfil();
+ verifierBadges();
+ afficherProfil();
+ actualiserMiniProgression();
+ notifier("Profil mis à jour !");
 }
-
 function choisirAvatar(a){
- profil.avatar=a;sauvegarderProfil();afficherProfil();actualiserMiniProgression();
+ profil.avatar=a;
+ sauvegarderProfil();
+ afficherProfil();
+ actualiserMiniProgression();
+ notifier("Avatar modifié !");
 }
 
-/* =========================
-   CARTE D'EXPLORATION
-========================= */
+/* ==================================================
+   7. CARTE D'EXPLORATION
+================================================== */
 
 function afficherCarteAccueil(){
- const zone=document.getElementById("carteExploration");if(!zone)return;
+ const zone=document.getElementById("carteExploration");
+ if(!zone)return;
  zone.innerHTML=themes.map(t=>{
   const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
   return `<div class="map-node">
-   <div style="font-size:27px">${t.emoji}</div>
+   <div style="font-size:30px">${t.emoji}</div>
    <strong>${t.nom}</strong>
-   <small>${lus}/100 découvertes</small>
+   <small class="muted">${lus}/100 découvertes</small>
    <div class="xp-bar"><div class="xp-fill" style="width:${lus}%"></div></div>
    <button onclick="ouvrirUnivers('${t.id}')">Explorer</button>
   </div>`;
  }).join("");
 }
-
 function afficherExploration(){
  afficherContenu(`
- <div class="content-head"><h2>🗺️ Carte d'exploration</h2><button onclick="accueil()">← Retour</button></div>
- <p class="muted">Chaque univers est un territoire à explorer. Plus tu découvres, plus ta carte se complète !</p>
- <div class="map-line" style="align-items:stretch;flex-wrap:wrap">
- ${themes.map(t=>{
-  const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
-  return `<div class="map-node">
-   <div style="font-size:42px">${t.emoji}</div>
-   <strong>${t.nom}</strong><p class="muted">${t.description}</p>
-   <p>${lus}/100 découvertes</p>
-   <div class="xp-bar"><div class="xp-fill" style="width:${lus}%"></div></div>
-   <button class="primary" onclick="ouvrirUnivers('${t.id}')">Visiter cet univers</button>
-  </div>`;
- }).join("")}
- </div>
- <section class="panel">
-  <h2>🌟 Progression globale</h2>
-  <p>${progression.articles.length} découvertes sur 500 explorées.</p>
-  <div class="xp-bar"><div class="xp-fill" style="width:${progression.articles.length/5}%"></div></div>
- </section>`,"exploration");
+  <div class="content-head"><h2>🗺️ Carte d'exploration</h2><button onclick="accueil()">← Retour</button></div>
+  <p class="muted">Chaque univers est un territoire à explorer. Plus tu découvres, plus ta carte se complète !</p>
+  <div class="map-line">
+   ${themes.map(t=>{
+    const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
+    return `<div class="map-node">
+     <div style="font-size:42px">${t.emoji}</div>
+     <strong>${t.nom}</strong>
+     <p class="muted">${t.description}</p>
+     <p>${lus}/100 découvertes</p>
+     <div class="xp-bar"><div class="xp-fill" style="width:${lus}%"></div></div>
+     <button class="primary" onclick="ouvrirUnivers('${t.id}')">Visiter</button>
+    </div>`;
+   }).join("")}
+  </div>
+  <section class="panel">
+   <h2>🌟 Progression globale</h2>
+   <p>${progression.articles.length} découvertes sur 500 explorées.</p>
+   <div class="xp-bar"><div class="xp-fill" style="width:${progression.articles.length/5}%"></div></div>
+  </section>
+ `,"exploration");
 }
 
-/* =========================
-   MISSIONS QUOTIDIENNES
-========================= */
+/* ==================================================
+   8. MISSIONS ET PROGRESSION
+================================================== */
 
 function afficherMissions(){
  const j=progression.jour;
@@ -765,16 +927,12 @@ function afficherMissions(){
   {nom:"Ajouter un favori",desc:"Sauvegarde une découverte.",fait:!!j.missionFavori,etat:j.missionFavori?"Terminé":"À faire",recompense:"+10 XP"}
  ];
  return missions.map(m=>`
- <div class="mission ${m.fait?"done":""}">
-  <div><strong>${m.fait?"✅":"🎯"} ${m.nom}</strong><br><small>${m.desc}</small></div>
-  <div style="text-align:right"><strong>${m.etat}</strong><br><small>${m.recompense}</small></div>
- </div>`).join("");
+  <div class="mission ${m.fait?"done":""}">
+   <div><strong>${m.fait?"✅":"🎯"} ${m.nom}</strong><br><small>${m.desc}</small></div>
+   <div style="text-align:right"><strong>${m.etat}</strong><br><small>${m.recompense}</small></div>
+  </div>
+ `).join("");
 }
-
-/* =========================
-   PROGRESSION ET STATISTIQUES
-========================= */
-
 function afficherProgression(){
  verifierBadges();
  const p=progression;
@@ -782,53 +940,57 @@ function afficherProgression(){
   const ok=p.badges.includes(b.id);
   return `<div class="badge-card ${ok?"":"locked"}">
    <div class="badge-icon">${b.icone}</div>
-   <strong>${b.nom}</strong><p>${b.description}</p>
+   <strong>${b.nom}</strong>
+   <p>${b.description}</p>
    <p>${ok?"✅ Débloqué":"🔒 Verrouillé"}</p>
   </div>`;
  }).join("");
  afficherContenu(`
- <div class="content-head"><h2>🏆 Ma progression</h2><button onclick="accueil()">← Retour</button></div>
- <section class="panel">
-  <div class="progress-top">
-   <div><p class="eyebrow">TON NIVEAU</p><div class="level-number">${profil.avatar} Niveau ${niveau()}</div></div>
-   <div><strong>${p.xp} XP</strong><p class="muted">${xpNiveau()} / 100 XP</p></div>
+  <div class="content-head"><h2>🏆 Ma progression</h2><button onclick="accueil()">← Retour</button></div>
+  <section class="panel">
+   <div class="progress-top">
+    <div><p class="eyebrow">TON NIVEAU</p><div class="level-number">${profil.avatar} Niveau ${niveau()}</div></div>
+    <div><strong>${p.xp} XP</strong><p class="muted">${xpNiveau()} / 100 XP</p></div>
+   </div>
+   <div class="xp-bar"><div class="xp-fill" style="width:${xpNiveau()}%"></div></div>
+   <p class="muted">Encore ${100-xpNiveau()} XP pour atteindre le niveau ${niveau()+1}.</p>
+  </section>
+  <h2 class="section-title">📊 Mes statistiques</h2>
+  <div class="stats-grid">
+   <div class="stat-card"><strong>${p.articles.length}</strong><span>Découvertes lues</span></div>
+   <div class="stat-card"><strong>${p.quizTermines}</strong><span>Quiz terminés</span></div>
+   <div class="stat-card"><strong>${p.meilleurQuiz}/10</strong><span>Meilleur score</span></div>
+   <div class="stat-card"><strong>${favoris.length}</strong><span>Favoris</span></div>
+   <div class="stat-card"><strong>${p.badges.length}/${badgesDef.length}</strong><span>Badges</span></div>
+   <div class="stat-card"><strong>${Math.min(100,Math.round(p.articles.length/5))}%</strong><span>Bibliothèque explorée</span></div>
   </div>
-  <div class="xp-bar"><div class="xp-fill" style="width:${xpNiveau()}%"></div></div>
-  <p class="muted">Encore ${100-xpNiveau()} XP pour atteindre le niveau ${niveau()+1}.</p>
- </section>
- <h2 class="section-title">📊 Mes statistiques</h2>
- <div class="stats-grid">
-  <div class="stat-card"><strong>${p.articles.length}</strong>Découvertes lues</div>
-  <div class="stat-card"><strong>${p.quizTermines}</strong>Quiz terminés</div>
-  <div class="stat-card"><strong>${p.meilleurQuiz}/10</strong>Meilleur score</div>
-  <div class="stat-card"><strong>${favoris.length}</strong>Favoris</div>
-  <div class="stat-card"><strong>${p.badges.length}/${badgesDef.length}</strong>Badges</div>
-  <div class="stat-card"><strong>${Math.min(100,Math.round(p.articles.length/5))}%</strong>Bibliothèque explorée</div>
- </div>
- <section class="panel">
-  <h2>🎯 Missions quotidiennes</h2>
-  <div class="missions">${afficherMissions()}</div>
- </section>
- <section class="panel">
-  <h2>🎖️ Collection de badges</h2>
-  <div class="badges">${badges}</div>
- </section>
- <section class="panel">
-  <h2>⚙️ Gestion de la progression</h2>
-  <p class="muted">Cette action efface tes XP, tes badges et tes découvertes enregistrées.</p>
-  <button onclick="reinitialiserProgression()">Réinitialiser ma progression</button>
- </section>`,"progression");
+  <section class="panel">
+   <h2>🎯 Missions quotidiennes</h2>
+   <div class="missions">${afficherMissions()}</div>
+  </section>
+  <section class="panel">
+   <h2>🎖️ Collection de badges</h2>
+   <div class="badges">${badges}</div>
+  </section>
+  <section class="panel">
+   <h2>⚙️ Gestion de la progression</h2>
+   <p class="muted">Cette action efface tes XP, tes badges et tes découvertes enregistrées. Tes favoris et ton profil seront conservés.</p>
+   <button onclick="reinitialiserProgression()">Réinitialiser ma progression</button>
+  </section>
+ `,"progression");
 }
-
 function reinitialiserProgression(){
  if(!confirm("Veux-tu vraiment remettre ta progression à zéro ?"))return;
  progression={xp:0,articles:[],quizTermines:0,meilleurQuiz:0,badges:[],jour:nouvelleJournee()};
- sauvegarderProgression();afficherProgression();afficherUnivers();
+ sauvegarderProgression();
+ afficherProgression();
+ afficherUnivers();
+ notifier("Progression réinitialisée.");
 }
 
-/* =========================
-   QUIZ
-========================= */
+/* ==================================================
+   9. QUIZ
+================================================== */
 
 const questionsQuiz=[
 {q:"Quelle est la plus grande planète du système solaire ?",choix:["Mars","Jupiter","Saturne","Neptune"],reponse:1,explication:"Jupiter est la plus grande planète de notre système solaire."},
@@ -857,88 +1019,137 @@ let quizActuel=[],questionIndex=0,scoreQuiz=0,quizRepondu=false;
 
 function demarrerQuiz(){
  quizActuel=[...questionsQuiz].sort(()=>Math.random()-.5).slice(0,10);
- questionIndex=0;scoreQuiz=0;afficherQuestionQuiz();
+ questionIndex=0;
+ scoreQuiz=0;
+ afficherQuestionQuiz();
 }
-
 function afficherQuestionQuiz(){
- const zone=document.getElementById("quizZoneResultat");if(!zone)return;
+ const zone=document.getElementById("quizZoneResultat");
+ if(!zone)return;
  if(questionIndex>=quizActuel.length){terminerQuiz();return}
- quizRepondu=false;const q=quizActuel[questionIndex];
- zone.innerHTML=`<div class="quiz-result"><p>Question ${questionIndex+1}/10 · ⭐ Score : ${scoreQuiz}</p>
- <div class="quiz-question">${echapper(q.q)}</div>
- <div class="quiz-options">${q.choix.map((x,i)=>`<button onclick="repondreQuiz(${i})">${echapper(x)}</button>`).join("")}</div>
- <div id="quizExplication"></div></div>`;
+ quizRepondu=false;
+ const q=quizActuel[questionIndex];
+ zone.innerHTML=`
+  <div class="quiz-box">
+   <p class="eyebrow">QUESTION ${questionIndex+1} / 10 · SCORE ${scoreQuiz}</p>
+   <div class="quiz-question">${echapper(q.q)}</div>
+   <div class="quiz-options">${q.choix.map((x,i)=>`<button onclick="repondreQuiz(${i})">${echapper(x)}</button>`).join("")}</div>
+   <div id="quizExplication"></div>
+  </div>`;
 }
-
 function repondreQuiz(index){
- if(quizRepondu)return;quizRepondu=true;
- const q=quizActuel[questionIndex],boutons=document.querySelectorAll("#quizZoneResultat .quiz-options button");
+ if(quizRepondu)return;
+ quizRepondu=true;
+ const q=quizActuel[questionIndex];
+ const boutons=document.querySelectorAll("#quizZoneResultat .quiz-options button");
  if(index===q.reponse)scoreQuiz++;
- boutons.forEach((b,i)=>{b.disabled=true;if(i===q.reponse)b.classList.add("correct");if(i===index&&index!==q.reponse)b.classList.add("wrong")});
- document.getElementById("quizExplication").innerHTML=`<div class="quiz-result"><strong>${index===q.reponse?"✅ Bonne réponse !":"❌ Pas tout à fait !"}</strong><p>${echapper(q.explication)}</p><button class="primary" onclick="questionSuivante()">${questionIndex===quizActuel.length-1?"Voir mon résultat":"Question suivante →"}</button></div>`;
+ boutons.forEach((b,i)=>{
+  b.disabled=true;
+  if(i===q.reponse)b.classList.add("correct");
+  if(i===index&&index!==q.reponse)b.classList.add("wrong");
+ });
+ document.getElementById("quizExplication").innerHTML=`
+  <div class="quiz-result">
+   <strong>${index===q.reponse?"✅ Bonne réponse !":"❌ Pas tout à fait !"}</strong>
+   <p class="muted">${echapper(q.explication)}</p>
+   <button class="primary" onclick="questionSuivante()" style="margin-top:12px">${questionIndex===quizActuel.length-1?"Voir mon résultat":"Question suivante →"}</button>
+  </div>`;
 }
-
-function questionSuivante(){questionIndex++;afficherQuestionQuiz()}
-
+function questionSuivante(){
+ questionIndex++;
+ afficherQuestionQuiz();
+}
 function terminerQuiz(){
  enregistrerQuiz(scoreQuiz);
- document.getElementById("quizZoneResultat").innerHTML=`<div class="quiz-result">
- <h2>🏁 Quiz terminé !</h2><p>Tu as obtenu <strong>${scoreQuiz}/10</strong>.</p>
- <p>🏆 Ton meilleur score : ${progression.meilleurQuiz}/10</p>
- <p>🎉 Tu gagnes ${10+scoreQuiz*5} XP pour ce quiz.</p>
- <button class="primary" onclick="demarrerQuiz()">🔄 Rejouer</button>
- </div>`;
+ document.getElementById("quizZoneResultat").innerHTML=`
+  <div class="quiz-box">
+   <p class="eyebrow">QUIZ TERMINÉ</p>
+   <h2 style="font-size:30px;margin:12px 0">🏁 ${scoreQuiz}/10</h2>
+   <p class="muted">${scoreQuiz===10?"Incroyable ! Un sans-faute !":scoreQuiz>=7?"Excellent travail !":scoreQuiz>=5?"Bien joué, continue !":"Chaque essai te permet d'apprendre !"}</p>
+   <p style="margin:12px 0">🏆 Meilleur score : ${progression.meilleurQuiz}/10</p>
+   <p>⭐ Tu gagnes ${10+scoreQuiz*5} XP pour ce quiz.</p>
+   <button class="primary" onclick="demarrerQuiz()" style="margin-top:15px">🔄 Rejouer</button>
+  </div>`;
  actualiserMiniProgression();
 }
 
-/* =========================
-   QUESTION DU JOUR
-========================= */
+/* ==================================================
+   10. QUESTION DU JOUR
+================================================== */
 
 function indiceJour(){
- const d=new Date();return Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
+ const d=new Date();
+ return Math.floor((d-new Date(d.getFullYear(),0,0))/86400000);
 }
-
 function afficherQuestionDuJour(){
  const zone=document.getElementById("quizZoneResultat");
  const q=questionsQuiz[indiceJour()%questionsQuiz.length];
  const date=new Date().toLocaleDateString("fr-FR");
- zone.innerHTML=`<div class="quiz-result">
- <h3>📅 Question du jour</h3><p>${date}</p>
- <div class="quiz-question">${echapper(q.q)}</div>
- <div class="quiz-options">${q.choix.map((x,i)=>`<button onclick="repondreQuestionDuJour(${i})" ${progression.jour.daily?"disabled":""}>${echapper(x)}</button>`).join("")}</div>
- <div id="dailyExplication">${progression.jour.daily?"<p>Tu as déjà répondu à la question du jour !</p>":""}</div>
- </div>`;
+ zone.innerHTML=`
+  <div class="quiz-box">
+   <p class="eyebrow">DÉFI QUOTIDIEN</p>
+   <h3>📅 Question du jour</h3>
+   <p class="muted">${date}</p>
+   <div class="quiz-question">${echapper(q.q)}</div>
+   <div class="quiz-options">
+    ${q.choix.map((x,i)=>`<button onclick="repondreQuestionDuJour(${i})" ${progression.jour.daily?"disabled":""}>${echapper(x)}</button>`).join("")}
+   </div>
+   <div id="dailyExplication">${progression.jour.daily?"<p class='muted'>Tu as déjà répondu à la question du jour ! Reviens demain.</p>":""}</div>
+  </div>`;
 }
-
 function repondreQuestionDuJour(index){
- const q=questionsQuiz[indiceJour()%questionsQuiz.length],zone=document.getElementById("dailyExplication");
+ const q=questionsQuiz[indiceJour()%questionsQuiz.length];
+ const zone=document.getElementById("dailyExplication");
  if(!zone||progression.jour.daily)return;
  document.querySelectorAll("#quizZoneResultat .quiz-options button").forEach((b,i)=>{
-  b.disabled=true;if(i===q.reponse)b.classList.add("correct");if(i===index&&index!==q.reponse)b.classList.add("wrong");
+  b.disabled=true;
+  if(i===q.reponse)b.classList.add("correct");
+  if(i===index&&i!==q.reponse)b.classList.add("wrong");
  });
- zone.innerHTML=`<div class="quiz-result"><strong>${index===q.reponse?"✅ Exactement !":"❌ Mauvaise réponse !"}</strong><p>${echapper(q.explication)}</p><p>⭐ +15 XP pour ta participation quotidienne !</p></div>`;
+ zone.innerHTML=`
+  <div class="quiz-result">
+   <strong>${index===q.reponse?"✅ Exactement !":"❌ Pas tout à fait !"}</strong>
+   <p class="muted">${echapper(q.explication)}</p>
+   <p>⭐ +15 XP pour ta participation quotidienne !</p>
+  </div>`;
  terminerQuestionDuJour();
 }
 
-/* =========================
-   MISSIONS ET FAVORIS
-========================= */
+/* ==================================================
+   11. PAGE À PROPOS
+================================================== */
 
-const ancienneChangerFavori=changerFavori;
-changerFavori=function(id){
- const avant=estFavori(id);
- ancienneChangerFavori(id);
- if(!avant){
-  progression.jour.missionFavori=true;
-  ajouterXP(10);
-  sauvegarderProgression();
- }
-};
+function afficherAPropos(){
+ afficherContenu(`
+  <div class="content-head"><h2>✦ À propos de NEXUS</h2><button onclick="accueil()">← Retour</button></div>
+  <section class="panel">
+   <p class="eyebrow">UN PROJET POUR APPRENDRE ET EXPLORER</p>
+   <h2 style="font-size:32px;margin:14px 0">La curiosité n'a pas de limites.</h2>
+   <p class="muted" style="font-size:15px;line-height:1.9">
+    NEXUS est un portail de découvertes conçu pour rendre l'apprentissage plus interactif.
+    Le site rassemble cinq univers : l'espace, la technologie, la science, les mystères et le gaming.
+    Chaque visite permet de découvrir de nouveaux sujets, de tester ses connaissances et de faire progresser son profil.
+   </p>
+  </section>
+  <h2 class="section-title">Comment le site est-il construit ?</h2>
+  <div class="about-grid">
+   <div class="about-item"><strong>HTML — La structure</strong><p class="muted">HTML organise les différentes parties du site : titres, textes, boutons et cartes.</p></div>
+   <div class="about-item"><strong>CSS — Le design</strong><p class="muted">CSS donne au site ses couleurs, ses animations, ses espacements et son apparence responsive.</p></div>
+   <div class="about-item"><strong>JavaScript — L'interactivité</strong><p class="muted">JavaScript gère la recherche, les quiz, les favoris, le profil et le système de progression.</p></div>
+  </div>
+  <h2 class="section-title">Les chiffres de NEXUS</h2>
+  <div class="stats-grid">
+   <div class="stat-card"><strong>5</strong><span>Univers à explorer</span></div>
+   <div class="stat-card"><strong>500</strong><span>Fiches de découverte</span></div>
+   <div class="stat-card"><strong>20</strong><span>Questions de quiz</span></div>
+   <div class="stat-card"><strong>100%</strong><span>Curiosité</span></div>
+  </div>
+ `,"apropos");
+}
 
-/* =========================
-   THÈME ET INITIALISATION
-========================= */
+/* ==================================================
+   12. THÈME ET DÉMARRAGE
+================================================== */
 
 function changerTheme(){
  document.body.classList.toggle("light");
@@ -946,7 +1157,6 @@ function changerTheme(){
  document.getElementById("themeButton").textContent=clair?"🌙":"☀️";
  try{localStorage.setItem("nexusTheme",clair?"light":"dark")}catch(e){}
 }
-
 try{
  if(localStorage.getItem("nexusTheme")==="light"){
   document.body.classList.add("light");
@@ -956,7 +1166,7 @@ try{
 
 verifierBadges();
 afficherUnivers();
+actualiserNombreFavoris();
 </script>
 </body>
 </html>
-```
