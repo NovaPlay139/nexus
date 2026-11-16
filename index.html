@@ -268,6 +268,55 @@ footer strong{color:var(--purple)}
 @media(prefers-reduced-motion:reduce){
  *,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}
 }
+
+/* ===== NEXUS 2.0 : couche visuelle ===== */
+:root{--neon:rgba(184,126,255,.45)}
+body:after{content:"";position:fixed;inset:-30%;z-index:-2;pointer-events:none;background:conic-gradient(from 120deg,transparent,rgba(135,90,240,.07),transparent,rgba(235,100,205,.06),transparent);animation:nexusAura 28s linear infinite}
+@keyframes nexusAura{to{transform:rotate(360deg)}}
+.logo{filter:drop-shadow(0 0 12px rgba(190,130,255,.35))}
+.hero{isolation:isolate;box-shadow:0 25px 90px rgba(0,0,0,.3),inset 0 1px rgba(255,255,255,.08)}
+.hero:before{animation:orbFloat 9s ease-in-out infinite alternate}
+.hero:after{animation:orbFloat 11s ease-in-out infinite alternate-reverse}
+@keyframes orbFloat{to{transform:translate(35px,28px) scale(1.15)}}
+.universe,.card,.panel,.stat-card,.profile-card,.badge-card,.map-node{transform-style:preserve-3d;transition:transform .28s ease,border-color .28s,box-shadow .28s}
+.card{position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(125deg,rgba(255,255,255,.055),transparent 38%);opacity:.7}
+.card:hover{transform:translateY(-8px) perspective(900px) rotateX(2deg);box-shadow:0 20px 45px var(--glow)}
+.universe:hover,.map-node:hover{transform:translateY(-5px) scale(1.015)}
+button:focus-visible,.universe:focus-visible,.map-node:focus-visible{outline:3px solid var(--pink);outline-offset:3px}
+nav button{white-space:nowrap}
+.arena-home{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.arena-home>div:nth-child(2){flex:1;min-width:190px}
+.arena-orb{width:64px;height:64px;display:grid;place-items:center;border-radius:20px;font-size:32px;background:linear-gradient(135deg,rgba(167,139,250,.3),rgba(237,139,223,.2));box-shadow:0 0 30px var(--glow)}
+.arena-shell{position:relative;overflow:hidden;border:1px solid var(--border);border-radius:24px;padding:clamp(18px,4vw,34px);background:radial-gradient(ellipse at 80% 0%,rgba(190,105,255,.18),transparent 45%),var(--surface);box-shadow:0 20px 70px rgba(0,0,0,.2)}
+.arena-header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.arena-clock{font-size:clamp(30px,6vw,48px);font-weight:900;color:var(--pink);font-variant-numeric:tabular-nums;text-shadow:0 0 25px var(--glow)}
+.arena-choice{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:13px;margin:22px 0}
+.arena-choice button{padding:20px;text-align:left;min-height:110px}
+.arena-choice strong{display:block;font-size:18px;margin-bottom:8px}
+.arena-choice span{color:var(--muted);font-size:12px;line-height:1.6}
+.arena-option{display:block;width:100%;margin:9px 0;text-align:left;padding:17px}
+.arena-option:disabled{opacity:1}
+.arena-option.correct{color:var(--text)}
+.arena-progress{height:9px;border-radius:20px;background:var(--surface2);overflow:hidden;margin:15px 0}
+.arena-progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--pink));transition:width .3s}
+.rank-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:30px;border:1px solid var(--border);background:var(--surface2);font-size:12px;font-weight:800}
+.profile-hero{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.profile-avatar-large{width:112px;height:112px;border-radius:30px;display:grid;place-items:center;font-size:66px;background:linear-gradient(135deg,rgba(167,139,250,.24),rgba(237,139,223,.18));border:1px solid var(--border);box-shadow:0 0 35px var(--glow)}
+.profile-title{color:var(--gold);font-weight:800;letter-spacing:1px;margin-top:7px}
+.stat-card strong{ text-shadow:0 0 18px var(--glow)}
+.explore-map{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px;margin-top:25px}
+.explore-zone{position:relative;min-height:190px;text-align:center;padding:22px;border:1px solid var(--border);border-radius:20px;background:linear-gradient(145deg,var(--surface2),var(--surface));overflow:hidden}
+.explore-zone.unlocked{box-shadow:inset 0 0 30px rgba(167,139,250,.08)}
+.explore-zone.locked{opacity:.58;filter:saturate(.5)}
+.explore-zone .zone-emoji{font-size:40px}
+.explore-zone h3{margin:12px 0 7px}
+.explore-zone .xp-bar{margin:14px 0}
+.zone-state{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:1px}
+.discovery-tag{display:inline-block;font-size:10px;color:var(--pink);border:1px solid var(--border);padding:5px 8px;border-radius:30px;margin-top:9px}
+@media(max-width:760px){.arena-home{align-items:flex-start}.profile-hero{grid-template-columns:1fr;text-align:center}.profile-avatar-large{margin:auto}nav{overflow-x:auto;padding-bottom:5px}nav button{flex:0 0 auto}}
+@media(prefers-reduced-motion:reduce){body:after,.hero:before,.hero:after{animation:none!important}}
+
 </style>
 </head>
 
@@ -280,6 +329,7 @@ footer strong{color:var(--purple)}
   <button onclick="afficherFavoris()">♡ Favoris <span id="nombreFavoris">0</span></button>
   <button onclick="afficherExploration()">🗺 Explorer</button>
   <button onclick="afficherProgression()">🏆 Progression</button>
+  <button onclick="afficherCompetition()">⚡ Compétition</button>
   <button onclick="afficherAPropos()">✦ À propos</button>
   <button onclick="changerTheme()" id="themeButton">☀️</button>
  </nav>
@@ -323,6 +373,13 @@ footer strong{color:var(--purple)}
    <button onclick="afficherQuestionDuJour()">📅 Question du jour</button>
   </div>
   <div id="quizZoneResultat"></div>
+ </div>
+
+ <h2 class="section-title">⚡ Arène NEXUS</h2>
+ <div class="panel arena-home">
+  <div class="arena-orb">⚡</div>
+  <div><h2>Prêt à battre ton record ?</h2><p class="muted">Lance un défi chronométré, choisis ta difficulté et améliore ton meilleur score.</p></div>
+  <button class="primary" onclick="afficherCompetition()">Entrer dans l’arène →</button>
  </div>
 
  <h2 class="section-title">Pourquoi NEXUS ?</h2>
@@ -1167,6 +1224,327 @@ try{
 verifierBadges();
 afficherUnivers();
 actualiserNombreFavoris();
+
+/* ==========================================================
+   NEXUS 2.0 — découvertes enrichies, profil, arène et carte
+========================================================== */
+
+// 10 nouveaux sujets originaux par univers. Les fiches historiques sont conservées.
+const ajoutsNexus = {
+ espace:[
+ ["Les pulsars","Des étoiles à neutrons qui émettent des signaux réguliers.","Un pulsar est une étoile à neutrons en rotation rapide. Son rayonnement balaie l'espace comme un phare cosmique."],
+ ["Les quasars","Des noyaux de galaxies extrêmement lumineux.","Un quasar est alimenté par la matière qui tombe vers un trou noir supermassif au centre d'une galaxie."],
+ ["Les météorites","Des fragments spatiaux retrouvés sur Terre.","Une météorite est un fragment naturel venu de l'espace qui traverse l'atmosphère et atteint le sol."],
+ ["La ceinture de Kuiper","Une région lointaine remplie de petits corps glacés.","Au-delà de Neptune se trouve une région contenant de nombreux objets glacés, dont Pluton."],
+ ["Les marées","Le mouvement régulier des océans.","Les marées sont principalement dues à l'attraction gravitationnelle de la Lune et du Soleil sur les océans."],
+ ["Les saisons","Pourquoi l'année change au fil des mois.","Les saisons sont liées à l'inclinaison de l'axe terrestre pendant sa révolution autour du Soleil."],
+ ["La lumière zodiacale","Une faible lueur dans le ciel nocturne.","Cette lueur diffuse provient de la lumière solaire réfléchie par de fines poussières réparties dans le système solaire."],
+ ["Les amas de galaxies","Des groupes immenses de galaxies.","La gravité rassemble des galaxies en groupes et en amas qui peuvent contenir des milliers de membres."],
+ ["Les magnétars","Des étoiles à neutrons au magnétisme intense.","Les magnétars sont des étoiles à neutrons dont le champ magnétique est exceptionnellement puissant."],
+ ["Les sondes interstellaires","Les missions qui quittent les régions planétaires.","Certaines sondes, comme Voyager 1 et 2, ont atteint l'espace interstellaire après leur long voyage."]
+ ],
+ technologie:[
+ ["Les écrans OLED","Des pixels qui produisent leur propre lumière.","Dans un écran OLED, chaque pixel peut émettre sa propre lumière, ce qui permet notamment d'obtenir des noirs profonds."],
+ ["Les microcontrôleurs","De petits ordinateurs intégrés aux objets.","Un microcontrôleur réunit processeur, mémoire et entrées-sorties dans une puce destinée à piloter un appareil."],
+ ["Les maisons connectées","Des équipements qui communiquent entre eux.","La domotique relie éclairage, chauffage, capteurs et appareils pour automatiser certaines fonctions d'un logement."],
+ ["Les jumeaux numériques","Des copies virtuelles de systèmes réels.","Un jumeau numérique est une représentation virtuelle mise à jour à partir de données d'un objet ou d'un processus réel."],
+ ["La reconnaissance vocale","Transformer la parole en texte ou commandes.","Les systèmes de reconnaissance vocale analysent un signal audio pour identifier les mots prononcés."],
+ ["Les batteries solides","Une piste pour le stockage de demain.","Les batteries à électrolyte solide remplacent l'électrolyte liquide de certaines batteries par un matériau solide."],
+ ["Les écrans e-ink","Des affichages qui imitent le papier.","L'encre électronique conserve l'image avec très peu d'énergie et équipe notamment de nombreuses liseuses."],
+ ["Les capteurs","Mesurer le monde physique.","Un capteur transforme une grandeur physique, comme la température ou la lumière, en signal exploitable."],
+ ["Les réseaux maillés","Des appareils qui relaient les communications.","Dans un réseau maillé, plusieurs appareils peuvent transmettre les données les uns aux autres pour étendre la couverture."],
+ ["La compression de données","Réduire la taille des fichiers.","La compression représente une information avec moins de données, avec ou sans perte selon la méthode."]
+ ],
+ science:[
+ ["Les tardigrades","Des animaux microscopiques très résistants.","Les tardigrades sont de minuscules animaux capables d'entrer dans un état de dormance qui leur permet de supporter des conditions extrêmes."],
+ ["Les lichens","Une association entre champignon et organisme photosynthétique.","Un lichen est une association durable entre un champignon et un partenaire capable de photosynthèse, souvent une algue."],
+ ["Les récifs coralliens","Des écosystèmes bâtis par de petits animaux.","Les coraux constructeurs forment des structures calcaires qui abritent une biodiversité marine très riche."],
+ ["Les cristaux","Des matières organisées à l'échelle microscopique.","Dans un cristal, les atomes ou molécules suivent une organisation régulière qui se répète dans l'espace."],
+ ["Les volcans sous-marins","Une activité géologique cachée sous les océans.","Les volcans sous-marins peuvent former de nouvelles roches et participer à la création de reliefs océaniques."],
+ ["Les enzymes","Des molécules qui accélèrent les réactions.","Les enzymes sont des catalyseurs biologiques qui accélèrent des réactions chimiques sans être consommées."],
+ ["Le microbiote","Les communautés de micro-organismes du corps.","Le microbiote rassemble des micro-organismes vivant dans un environnement donné, notamment dans le système digestif."],
+ ["Les aurores et la science","Quand le Soleil rencontre le champ magnétique terrestre.","Les particules du vent solaire peuvent être guidées par le champ magnétique et exciter des gaz de la haute atmosphère."],
+ ["La supraconductivité","Un phénomène électrique étonnant.","Certains matériaux deviennent supraconducteurs sous certaines conditions et peuvent conduire le courant sans résistance électrique."],
+ ["Les fractales","Des formes qui se répètent à différentes échelles.","Une fractale est une structure dont certaines formes se retrouvent à plusieurs niveaux d'observation."]
+ ],
+ mysteres:[
+ ["Le mécanisme d'Anticythère","Un calculateur astronomique de l'Antiquité.","Repêché dans une épave grecque, ce mécanisme complexe utilisait des engrenages pour représenter des cycles astronomiques."],
+ ["Les moaï inachevés","Les traces d'un chantier monumental.","Sur Rapa Nui, certaines statues sont restées près des carrières, offrant des indices sur leur fabrication et leur transport."],
+ ["Les bibliothèques perdues","Des textes anciens qui ont disparu.","Des œuvres antiques ne nous sont connues que par des citations ou des copies tardives, ce qui rend leur histoire difficile à reconstituer."],
+ ["Les cartes de Piri Reis","Une carte ancienne riche en détails.","Cette carte ottomane du XVIe siècle rassemble des informations géographiques issues de plusieurs sources cartographiques."],
+ ["Les volcans de boue","Des paysages façonnés par des remontées souterraines.","Les volcans de boue expulsent un mélange d'eau, de gaz et de sédiments, sans être des volcans magmatiques classiques."],
+ ["Les sons mystérieux de l'océan","Des signaux sous-marins difficiles à identifier.","Les hydrophones enregistrent des sons produits par la glace, les animaux, les séismes et les activités humaines."],
+ ["Les langues non déchiffrées","Des écritures dont le sens reste inconnu.","Certaines écritures anciennes ne peuvent pas encore être lues, faute de textes bilingues ou de contexte suffisant."],
+ ["Les cités englouties","Des vestiges archéologiques sous l'eau.","Des villes et ports anciens ont été submergés par des changements du niveau marin ou des phénomènes géologiques."],
+ ["Les faux souvenirs","Quand la mémoire reconstruit un événement.","La mémoire n'est pas un enregistrement parfait : elle reconstruit les souvenirs et peut intégrer des détails inexacts."],
+ ["Les météorites martiennes","Des roches venues d'une autre planète.","De rares météorites retrouvées sur Terre proviennent de Mars, identifiées grâce à leur composition et à des gaz piégés."]
+ ],
+ gaming:[
+ ["La capture de mouvement","Enregistrer les mouvements pour animer un personnage.","La motion capture utilise des caméras ou des capteurs pour enregistrer les mouvements d'une personne et les appliquer à un personnage numérique."],
+ ["La génération de terrain","Créer des paysages avec des règles.","Les jeux utilisent des algorithmes pour produire des reliefs, des biomes et des environnements variés."],
+ ["Les hitboxes","Les zones qui détectent les collisions.","Une hitbox est une forme invisible utilisée pour détecter les contacts entre personnages, objets ou attaques dans un jeu."],
+ ["Le game feel","Ce qui rend les commandes satisfaisantes.","Le game feel désigne les sensations produites par les commandes, les animations, les sons et les retours visuels."],
+ ["Les arbres de dialogue","Des conversations à plusieurs chemins.","Un arbre de dialogue organise les choix de conversation et leurs conséquences possibles dans un jeu."],
+ ["Le pathfinding","Calculer un chemin pour un personnage.","Les algorithmes de pathfinding aident les personnages non joueurs à trouver un trajet dans un niveau."],
+ ["Le level streaming","Charger progressivement un grand monde.","Le level streaming charge et décharge des portions d'un environnement selon la position du joueur."],
+ ["Les systèmes de particules","Créer fumée, étincelles et poussière.","Un système de particules génère de nombreux petits éléments animés pour représenter des effets visuels."],
+ ["Les sauvegardes de jeu","Conserver la progression du joueur.","Un système de sauvegarde enregistre des données comme la position, l'inventaire et les objectifs accomplis."],
+ ["Le prototypage","Tester une idée avant de tout construire.","Un prototype permet de vérifier rapidement si une mécanique est amusante et compréhensible avant de produire le jeu complet."]
+ ]
+};
+
+// Remplace les répétitions artificielles par 100 fiches à angles différents par univers.
+(function enrichirBibliotheque(){
+ const angles = [
+  {titre:t=>t, desc:(s)=>s[1], texte:s=>s[2], niveau:"Découverte"},
+  {titre:t=>"Comment fonctionne : "+t, desc:s=>"Le principe et les mécanismes derrière "+s[0].toLowerCase()+".", texte:s=>s[2]+" Pour comprendre le sujet, observe les éléments qui le composent, leurs interactions et les conditions dans lesquelles le phénomène apparaît.", niveau:"Comprendre"},
+  {titre:t=>"Pourquoi c'est important : "+t, desc:s=>"Les conséquences, les usages et les liens de "+s[0].toLowerCase()+".", texte:s=>s[2]+" Ce sujet permet aussi de faire des liens avec d'autres domaines. Il aide à mieux comprendre comment le monde naturel, les sciences ou les technologies fonctionnent.", niveau:"Approfondir"}
+ ];
+ themes.forEach(theme=>{
+  const pool=[...(sujets[theme.id]||[]),...(ajoutsNexus[theme.id]||[])];
+  const articles=[];
+  let n=0;
+  pool.forEach((s,i)=>{
+   const variantes=i<20?3:2;
+   for(let v=0;v<variantes && n<100;v++){
+    const angle=angles[v];
+    const titre=angle.titre(s[0]);
+    articles.push({
+     id:theme.id+"-"+(++n),
+     titre,
+     description:angle.desc(s),
+     texte:angle.texte(s),
+     univers:theme.nom,
+     emoji:theme.emoji,
+     difficulte:angle.niveau,
+     lecture:Math.max(2,Math.min(8,Math.ceil(angle.texte(s).length/180))),
+     angle:v
+    });
+   }
+  });
+  // Sécurité : compléter uniquement si une future modification réduit le nombre de sujets.
+  while(articles.length<100){
+   const s=pool[articles.length%pool.length];
+   const num=articles.length+1;
+   articles.push({id:theme.id+"-"+num,titre:"Dossier thématique : "+s[0]+" ("+num+")",description:s[1],texte:s[2]+" Ce dossier propose de relier cette notion à d'autres connaissances et de vérifier ce que l'on a compris.",univers:theme.nom,emoji:theme.emoji,difficulte:"Approfondir",lecture:3});
+  }
+  univers[theme.id].articles.splice(0,univers[theme.id].articles.length,...articles);
+ });
+ tousLesArticles.splice(0,tousLesArticles.length,...themes.flatMap(t=>univers[t.id].articles));
+ // Nettoie les anciennes lectures qui ne correspondent plus à un identifiant valide.
+ progression.articles=progression.articles.filter(id=>trouverArticle(id));
+ sauvegarderProgression();
+})();
+
+// Quelques badges supplémentaires, compatibles avec le système déjà en place.
+badgesDef.push(
+ {id:"collection25",nom:"Archiviste",icone:"🗃️",description:"Lire 100 découvertes.",condition:p=>p.articles.length>=100},
+ {id:"polyvalent",nom:"Sans frontières",icone:"🪐",description:"Lire 10 découvertes dans chaque univers.",condition:p=>themes.every(t=>p.articles.filter(id=>id.startsWith(t.id+"-")).length>=10)},
+ {id:"arene",nom:"Première victoire",icone:"⚡",description:"Terminer un défi de l'arène.",condition:p=>p.quizTermines>=1},
+ {id:"niveau10",nom:"Légende NEXUS",icone:"👑",description:"Atteindre le niveau 10.",condition:p=>p.xp>=900}
+);
+
+// Sauvegarde des records de l'arène, séparée pour ne pas toucher aux anciennes données.
+let recordsNexus = chargerJSON("nexusRecords",{facile:0,moyen:0,difficile:0,meilleurTemps:0});
+if(!recordsNexus || typeof recordsNexus!=="object") recordsNexus={facile:0,moyen:0,difficile:0,meilleurTemps:0};
+function sauvegarderRecords(){sauvegarder("nexusRecords",recordsNexus)}
+function titreExplorateur(){
+ const n=niveau();
+ if(n>=20)return "Légende du Nexus";
+ if(n>=15)return "Maître des univers";
+ if(n>=10)return "Explorateur d'élite";
+ if(n>=5)return "Chercheur confirmé";
+ if(n>=3)return "Curieux avancé";
+ return "Nouvel explorateur";
+}
+
+// Profil enrichi : identité, statistiques, titre et record personnel.
+function afficherProfil(){
+ const avatars=["🧑‍🚀","🧑‍💻","🧙","🦊","🐼","🐺","🐉","👾","🤖","🦉","🦁","🐸","🦄","🐙","🛰️","👑"];
+ const universLus=themes.filter(t=>univers[t.id].articles.some(a=>progression.articles.includes(a.id))).length;
+ const taux=Math.round(progression.articles.length/tousLesArticles.length*100);
+ afficherContenu(`
+  <div class="content-head"><h2>👤 Mon profil NEXUS</h2><button onclick="accueil()">← Retour</button></div>
+  <section class="arena-shell">
+   <div class="profile-hero">
+    <div class="profile-avatar-large">${profil.avatar}</div>
+    <div>
+     <p class="eyebrow">IDENTITÉ D'EXPLORATEUR</p>
+     <h2 style="font-size:30px;margin:8px 0">${echapper(profil.pseudo)}</h2>
+     <p class="profile-title">${titreExplorateur()}</p>
+     <p class="muted" style="margin-top:9px">Niveau ${niveau()} · ${progression.xp} XP · ${progression.badges.length} succès débloqués</p>
+     <div class="xp-bar"><div class="xp-fill" style="width:${xpNiveau()}%"></div></div>
+     <small class="muted">${xpNiveau()}/100 XP vers le niveau ${niveau()+1}</small>
+    </div>
+   </div>
+  </section>
+  <h2 class="section-title">📊 Mes statistiques</h2>
+  <div class="stats-grid">
+   <div class="stat-card"><strong>${progression.articles.length}</strong><span>Découvertes lues</span></div>
+   <div class="stat-card"><strong>${favoris.length}</strong><span>Favoris</span></div>
+   <div class="stat-card"><strong>${progression.quizTermines}</strong><span>Quiz terminés</span></div>
+   <div class="stat-card"><strong>${progression.meilleurQuiz}/10</strong><span>Meilleur score</span></div>
+   <div class="stat-card"><strong>${universLus}/5</strong><span>Univers visités</span></div>
+   <div class="stat-card"><strong>${taux}%</strong><span>Bibliothèque lue</span></div>
+  </div>
+  <div class="profile-grid" style="margin-top:20px">
+   <section class="panel">
+    <h2>✨ Personnaliser mon profil</h2>
+    <label for="pseudo">Ton pseudo</label>
+    <div class="profile-form"><input id="pseudo" maxlength="20" value="${echapper(profil.pseudo)}" placeholder="Ton pseudo"><button class="primary" onclick="enregistrerProfil()">Enregistrer</button></div>
+    <h3 style="margin-top:22px">Choisir ton avatar</h3>
+    <div class="avatar-list">${avatars.map(a=>`<button onclick="choisirAvatar('${a}')" aria-label="Choisir l'avatar ${a}">${a}</button>`).join("")}</div>
+   </section>
+   <section class="panel">
+    <h2>🏅 Tes records de l'arène</h2>
+    <p class="muted">Meilleurs scores enregistrés par difficulté.</p>
+    <p class="pill">🟢 Facile : ${recordsNexus.facile||0}/10</p>
+    <p class="pill">🟣 Moyen : ${recordsNexus.moyen||0}/10</p>
+    <p class="pill">🔴 Difficile : ${recordsNexus.difficile||0}/10</p>
+    <p class="muted" style="margin-top:12px">Ton titre actuel : <strong>${titreExplorateur()}</strong></p>
+    <button class="primary" onclick="afficherCompetition()">Accéder à l'arène →</button>
+   </section>
+  </div>
+ `,"profil");
+}
+
+// Carte d'exploration en zones à débloquer. Les univers restent accessibles depuis la page d'accueil.
+function afficherExploration(){
+ const zones=[
+  {nom:"Camp de départ",emoji:"🏕️",seuil:0,desc:"Ton point de départ. Apprends à connaître NEXUS."},
+  {nom:"Vallée des idées",emoji:"💡",seuil:5,desc:"Un territoire pour les explorateurs réguliers."},
+  {nom:"Archives stellaires",emoji:"🌠",seuil:15,desc:"Les découvertes commencent à s'accumuler."},
+  {nom:"Citadelle du savoir",emoji:"🏰",seuil:30,desc:"Un espace réservé aux curieux persévérants."},
+  {nom:"Noyau NEXUS",emoji:"💎",seuil:50,desc:"Le cœur de la connaissance t'attend."}
+ ];
+ const total=progression.articles.length;
+ afficherContenu(`
+  <div class="content-head"><h2>🗺️ Carte d'exploration</h2><button onclick="accueil()">← Retour</button></div>
+  <section class="arena-shell">
+   <p class="eyebrow">CARTE GALACTIQUE</p>
+   <h2 style="font-size:28px;margin:10px 0">Ton voyage dans NEXUS</h2>
+   <p class="muted">Lis des découvertes pour faire évoluer ton parcours et révéler de nouvelles zones.</p>
+   <div class="xp-bar"><div class="xp-fill" style="width:${Math.min(100,total/2)}%"></div></div>
+   <strong>${total}/500 découvertes explorées</strong>
+  </section>
+  <div class="explore-map">
+   ${zones.map((z,i)=>{
+    const ok=total>=z.seuil;
+    return `<div class="explore-zone ${ok?"unlocked":"locked"}">
+     <div class="zone-emoji">${ok?z.emoji:"🔒"}</div><h3>${z.nom}</h3>
+     <p class="muted">${z.desc}</p>
+     <p class="zone-state">${ok?"✦ ZONE DÉBLOQUÉE":"DÉBLOQUÉE À "+z.seuil+" LECTURES"}</p>
+     ${ok?`<span class="discovery-tag">Zone ${i+1} accessible</span>`:""}
+    </div>`;
+   }).join("")}
+  </div>
+  <h2 class="section-title">🌌 Les cinq univers</h2>
+  <div class="map-line">
+   ${themes.map(t=>{
+    const lus=univers[t.id].articles.filter(a=>progression.articles.includes(a.id)).length;
+    return `<div class="map-node">
+     <div style="font-size:38px">${t.emoji}</div><strong>${t.nom}</strong>
+     <p class="muted">${lus}/100 découvertes</p><div class="xp-bar"><div class="xp-fill" style="width:${lus}%"></div></div>
+     <button class="primary" onclick="ouvrirUnivers('${t.id}')">Explorer l'univers</button>
+    </div>`;
+   }).join("")}
+  </div>
+ `,"exploration");
+}
+
+// Mode compétition : quiz à dix questions avec chronomètre et records par difficulté.
+let arene={active:false,difficulte:"moyen",questions:[],index:0,score:0,temps:15,restant:15,timer:null,verrou:false,demarre:0};
+function arreterHorlogeArene(){if(arene.timer){clearInterval(arene.timer);arene.timer=null}}
+function afficherCompetition(){
+ arreterHorlogeArene(); arene.active=false;
+ afficherContenu(`
+  <div class="content-head"><h2>⚡ Arène NEXUS</h2><button onclick="accueil()">← Retour</button></div>
+  <section class="arena-shell">
+   <p class="eyebrow">MODE COMPÉTITION</p><h2 style="font-size:clamp(27px,5vw,42px);margin:12px 0">Teste tes connaissances.</h2>
+   <p class="muted">Dix questions, un chronomètre et un record à battre. Chaque bonne réponse te rapproche du sommet.</p>
+   <div class="arena-choice">
+    <button onclick="lancerArene('facile')"><strong>🟢 Facile</strong><span>20 secondes par question · Pour s'échauffer</span></button>
+    <button onclick="lancerArene('moyen')"><strong>🟣 Moyen</strong><span>15 secondes par question · Le défi classique</span></button>
+    <button onclick="lancerArene('difficile')"><strong>🔴 Difficile</strong><span>10 secondes par question · Pour les experts</span></button>
+   </div>
+   <div class="stats-grid">
+    <div class="stat-card"><strong>${recordsNexus.facile||0}/10</strong><span>Record facile</span></div>
+    <div class="stat-card"><strong>${recordsNexus.moyen||0}/10</strong><span>Record moyen</span></div>
+    <div class="stat-card"><strong>${recordsNexus.difficile||0}/10</strong><span>Record difficile</span></div>
+   </div>
+  </section>
+  <div id="arenaGame" style="margin-top:20px"></div>
+ `,"competition");
+}
+function lancerArene(difficulte){
+ arreterHorlogeArene();
+ const temps={facile:20,moyen:15,difficile:10}[difficulte]||15;
+ arene={active:true,difficulte,questions:[...questionsQuiz].sort(()=>Math.random()-.5).slice(0,10),index:0,score:0,temps,restant:temps,timer:null,verrou:false,demarre:Date.now()};
+ afficherQuestionArene();
+}
+function afficherQuestionArene(){
+ const zone=document.getElementById("arenaGame");if(!zone)return;
+ if(arene.index>=10){terminerArene();return}
+ arreterHorlogeArene();arene.verrou=false;arene.restant=arene.temps;
+ const q=arene.questions[arene.index];
+ zone.innerHTML=`<section class="arena-shell">
+  <div class="arena-header"><span class="rank-chip">⚡ ${arene.difficulte.toUpperCase()}</span><div class="arena-clock" id="arenaClock">${arene.restant}s</div></div>
+  <div class="arena-progress"><span style="width:${arene.index*10}%"></span></div>
+  <p class="eyebrow">QUESTION ${arene.index+1}/10 · SCORE ${arene.score}</p>
+  <div class="quiz-question">${echapper(q.q)}</div>
+  <div id="arenaOptions">${q.choix.map((x,i)=>`<button class="arena-option" onclick="repondreArene(${i})">${String.fromCharCode(65+i)} · ${echapper(x)}</button>`).join("")}</div>
+  <div id="arenaFeedback"></div>
+ </section>`;
+ arene.timer=setInterval(()=>{
+  arene.restant--;
+  const clock=document.getElementById("arenaClock");if(clock)clock.textContent=arene.restant+"s";
+  if(arene.restant<=0){arreterHorlogeArene();repondreArene(-1)}
+ },1000);
+}
+function repondreArene(index){
+ if(!arene.active||arene.verrou)return;
+ arene.verrou=true;arreterHorlogeArene();
+ const q=arene.questions[arene.index],bon=index===q.reponse;
+ if(bon)arene.score++;
+ document.querySelectorAll("#arenaOptions button").forEach((b,i)=>{
+  b.disabled=true;if(i===q.reponse)b.classList.add("correct");
+  if(i===index&&!bon)b.classList.add("wrong");
+ });
+ const feedback=document.getElementById("arenaFeedback");
+ if(feedback)feedback.innerHTML=`<div class="quiz-result"><strong>${index===-1?"⏱️ Temps écoulé !":bon?"✅ Bonne réponse !":"❌ Mauvaise réponse"}</strong><p class="muted">${echapper(q.explication)}</p><button class="primary" style="margin-top:12px" onclick="questionSuivanteArene()">Continuer →</button></div>`;
+}
+function questionSuivanteArene(){if(!arene.active)return;arene.index++;afficherQuestionArene()}
+function terminerArene(){
+ arreterHorlogeArene();arene.active=false;
+ const d=arene.difficulte,ancien=recordsNexus[d]||0,nouveau=arene.score>ancien;
+ recordsNexus[d]=Math.max(ancien,arene.score);sauvegarderRecords();
+ enregistrerQuiz(arene.score);
+ const bonus={facile:0,moyen:10,difficile:20}[d]||0;
+ if(bonus)ajouterXP(bonus);
+ const zone=document.getElementById("arenaGame");if(!zone)return;
+ zone.innerHTML=`<section class="arena-shell" style="text-align:center">
+  <div style="font-size:58px">🏆</div><p class="eyebrow">DÉFI TERMINÉ</p>
+  <h2 style="font-size:46px;margin:12px 0">${arene.score}/10</h2>
+  <p class="muted">${arene.score===10?"Incroyable, sans-faute !":arene.score>=7?"Très belle performance !":arene.score>=5?"Bien joué, continue à progresser !":"Chaque défi est une occasion d'apprendre."}</p>
+  ${nouveau?'<p class="pill">✨ Nouveau record personnel !</p>':""}
+  <p style="margin:12px 0">Record ${d} : <strong>${recordsNexus[d]}/10</strong></p>
+  <p class="muted">Récompense du quiz : ${10+arene.score*5+bonus} XP</p>
+  <button class="primary" onclick="lancerArene('${d}')">Rejouer</button>
+  <button onclick="afficherCompetition()">Changer de difficulté</button>
+ </section>`;
+ verifierBadges();
+}
+
+// Le bouton de retour vers l'accueil ne doit pas laisser un chronomètre tourner.
+const accueilNexusOriginal=accueil;
+accueil=function(){arreterHorlogeArene();arene.active=false;accueilNexusOriginal()};
+
+// Mise à jour des compteurs et des univers avec la nouvelle bibliothèque.
+afficherUnivers();
+actualiserNombreFavoris();
+actualiserMiniProgression();
+verifierBadges();
+
 </script>
 </body>
 </html>
