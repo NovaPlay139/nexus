@@ -317,6 +317,12 @@ nav button{white-space:nowrap}
 @media(max-width:760px){.arena-home{align-items:flex-start}.profile-hero{grid-template-columns:1fr;text-align:center}.profile-avatar-large{margin:auto}nav{overflow-x:auto;padding-bottom:5px}nav button{flex:0 0 auto}}
 @media(prefers-reduced-motion:reduce){body:after,.hero:before,.hero:after{animation:none!important}}
 
+
+/* NEXUS ACADEMY */
+.academy-hero{position:relative;overflow:hidden;padding:clamp(24px,5vw,48px);border:1px solid var(--border);border-radius:26px;background:radial-gradient(circle at 85% 15%,rgba(236,72,153,.2),transparent 32%),radial-gradient(circle at 10% 90%,rgba(139,92,246,.22),transparent 38%),var(--surface)}
+.academy-hero h2{font-size:clamp(30px,5vw,48px);margin:8px 0}.academy-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin:20px 0}.academy-course{padding:20px;border:1px solid var(--border);border-radius:19px;background:var(--surface);text-align:left;transition:.2s}.academy-course:hover{transform:translateY(-4px);box-shadow:0 12px 35px var(--glow)}.academy-course .course-icon{font-size:34px}.academy-course h3{margin:10px 0 5px}.academy-course p{color:var(--muted);font-size:13px}.academy-course button{margin-top:13px}.academy-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.8fr);gap:18px}.academy-lesson,.academy-editor{padding:20px;border:1px solid var(--border);border-radius:20px;background:var(--surface)}.academy-lesson li{margin:9px 0;color:var(--muted)}.academy-editor textarea{width:100%;min-height:170px;resize:vertical;background:#11111b;color:#f5f1ff;border:1px solid #45405c;border-radius:12px;padding:13px;font:13px/1.55 Consolas,monospace}.academy-editor label{display:block;font-size:12px;font-weight:800;margin:12px 0 6px}.academy-preview{width:100%;height:250px;background:white;border:1px solid var(--border);border-radius:12px;margin-top:12px}.academy-progress{height:9px;background:var(--surface2);border-radius:20px;overflow:hidden;margin:12px 0}.academy-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--pink))}.academy-note{padding:13px;border-radius:12px;background:var(--surface2);color:var(--muted);font-size:13px;margin:12px 0}.academy-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}.academy-tabs button.active{border-color:var(--pink);box-shadow:0 0 18px var(--glow)}
+@media(max-width:760px){.academy-layout{grid-template-columns:1fr}}
+
 </style>
 </head>
 
@@ -330,6 +336,7 @@ nav button{white-space:nowrap}
   <button onclick="afficherExploration()">🗺 Explorer</button>
   <button onclick="afficherProgression()">🏆 Progression</button>
   <button onclick="afficherCompetition()">⚡ Compétition</button>
+  <button onclick="afficherAcademy()">💻 Academy</button>
   <button onclick="afficherAPropos()">✦ À propos</button>
   <button onclick="changerTheme()" id="themeButton">☀️</button>
  </nav>
@@ -1539,6 +1546,63 @@ function terminerArene(){
 const accueilNexusOriginal=accueil;
 accueil=function(){arreterHorlogeArene();arene.active=false;accueilNexusOriginal()};
 
+
+/* ==================================================
+   NEXUS ACADEMY — APPRENDRE EN PRATIQUANT
+================================================== */
+const academyCours=[
+ {id:"html",nom:"HTML",icone:"🌐",niveau:"Débutant",desc:"Construis la structure de tes pages web.",objectif:"Créer une page avec un titre, du texte et un lien.",lecons:[["Les balises","HTML décrit la structure du contenu. Une balise indique le rôle d'un élément."],["Titres et paragraphes","Utilise h1 pour le titre principal et p pour un paragraphe."],["Les liens","La balise a permet de créer un lien avec l'attribut href."]]},
+ {id:"css",nom:"CSS",icone:"🎨",niveau:"Débutant → intermédiaire",desc:"Donne du style, des couleurs et des animations à tes pages.",objectif:"Personnaliser une carte avec couleurs, marges et arrondis.",lecons:[["Sélecteurs","CSS sélectionne les éléments HTML pour modifier leur apparence."],["Couleurs et tailles","color, background, font-size et border-radius changent le rendu."],["Mise en page","Flexbox et Grid aident à organiser les éléments."]]},
+ {id:"javascript",nom:"JavaScript",icone:"⚡",niveau:"Débutant → avancé",desc:"Rends tes sites interactifs avec des variables et des fonctions.",objectif:"Créer un bouton qui modifie un texte.",lecons:[["Variables","let et const servent à stocker des informations."],["Conditions","if et else permettent de choisir quoi faire selon une situation."],["Fonctions","Une fonction regroupe des instructions que tu peux réutiliser."]]},
+ {id:"python",nom:"Python",icone:"🐍",niveau:"Débutant",desc:"Découvre la programmation, les boucles et les petits programmes.",objectif:"Écrire un programme qui affiche un message et compte.",lecons:[["Afficher","print() affiche un message dans la console."],["Variables","Une variable peut contenir du texte, un nombre ou une valeur logique."],["Boucles","for permet de répéter des instructions."]]},
+ {id:"csharp",nom:"C# / Unity",icone:"🎮",niveau:"Débutant → avancé",desc:"Apprends les bases du langage utilisé pour créer des jeux avec Unity.",objectif:"Comprendre un script qui déplace un personnage.",lecons:[["Première classe","En C#, le code est organisé dans des classes."],["Variables et méthodes","Les variables stockent des données et les méthodes réalisent des actions."],["Unity et Update","Unity appelle Update à chaque image pour gérer les actions continues."]]},
+ {id:"sql",nom:"SQL",icone:"🗄️",niveau:"Débutant",desc:"Apprends à organiser et interroger des bases de données.",objectif:"Lire une requête qui sélectionne des informations.",lecons:[["Les tables","Une base de données range les informations dans des tables."],["SELECT","SELECT permet de choisir les colonnes à afficher."],["WHERE","WHERE filtre les lignes selon une condition."]]}
+];
+const academyExemples={
+ html:{html:'<h1>Bienvenue dans mon site !</h1>\n<p>Je viens de créer ma première page.</p>\n<a href="https://example.com">Mon premier lien</a>',css:'body { font-family: Arial; padding: 25px; }\nh1 { color: #8b5cf6; }\np { color: #333; }',js:'console.log("Ma première page fonctionne !");'},
+ css:{html:'<main class="carte">\n  <h1>Ma carte stylée</h1>\n  <p>Je découvre le CSS !</p>\n  <button>Découvrir</button>\n</main>',css:'body { font-family: Arial; background: #171326; padding: 30px; }\n.carte { background: white; padding: 25px; border-radius: 20px; max-width: 320px; }\nh1 { color: #8b5cf6; }\nbutton { background: #8b5cf6; color: white; border: 0; padding: 10px 16px; border-radius: 10px; }',js:''},
+ javascript:{html:'<h1 id="message">Salut !</h1>\n<button id="bouton">Clique ici</button>',css:'body { font-family: Arial; padding: 25px; }\nbutton { padding: 12px 18px; border: 0; border-radius: 10px; background: #8b5cf6; color: white; cursor: pointer; }',js:'const bouton = document.querySelector("#bouton");\nconst message = document.querySelector("#message");\n\nbouton.addEventListener("click", () => {\n  message.textContent = "Bravo, tu as réussi !";\n});'},
+ python:{html:'<h2>Exemple Python</h2><p>Le code Python ne s’exécute pas dans cet aperçu web. Essaie-le dans un interpréteur Python.</p>',css:'body { font-family: Arial; padding: 20px; } h2 { color: #8b5cf6; }',js:''},
+ csharp:{html:'<h2>Exemple C# / Unity</h2><p>Ce script est un exemple à lire. Pour le tester, utilise un projet Unity avec un script C#.</p>',css:'body { font-family: Arial; padding: 20px; } h2 { color: #8b5cf6; }',js:''},
+ sql:{html:'<h2>Exemple SQL</h2><p>SQL sert à interroger une base de données. Cet exemple est à lire et à essayer dans un environnement SQL.</p>',css:'body { font-family: Arial; padding: 20px; } h2 { color: #8b5cf6; }',js:''}
+};
+let academyCoursActif="html";
+let academyLecons=chargerJSON("nexusAcademyLecons",[]);
+if(!Array.isArray(academyLecons))academyLecons=[];
+function academyEchapper(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function academyCoursTermines(id){return academyLecons.filter(x=>x.startsWith(id+"-")).length}
+function afficherAcademy(){
+ const total=academyCours.reduce((n,c)=>n+c.lecons.length,0),faits=academyLecons.length;
+ afficherContenu(`<div class="content-head"><h2>💻 NEXUS Academy</h2><button onclick="accueil()">← Retour</button></div>
+ <section class="academy-hero"><p class="eyebrow">APPRENDS · CODE · CRÉE</p><h2>Transforme ta curiosité en compétences.</h2><p class="muted">Des cours progressifs, des exemples à tester et des mini-projets pour apprendre à programmer à ton rythme.</p><div class="academy-progress"><span style="width:${Math.min(100,faits/total*100)}%"></span></div><strong>${faits}/${total} leçons terminées</strong><p style="margin-top:14px"><span class="rank-chip">⭐ ${progression.xp} XP NEXUS</span></p></section>
+ <h2 class="section-title">Choisis ton parcours</h2><div class="academy-grid">${academyCours.map(c=>`<article class="academy-course"><div class="course-icon">${c.icone}</div><h3>${c.nom}</h3><p>${c.desc}</p><small class="muted">${c.niveau} · ${academyCoursTermines(c.id)}/${c.lecons.length} leçons</small><div class="academy-progress"><span style="width:${academyCoursTermines(c.id)/c.lecons.length*100}%"></span></div><button class="primary" onclick="ouvrirCoursAcademy('${c.id}')">Continuer →</button></article>`).join("")}</div>
+ <section class="panel"><h2>🧪 Atelier de code</h2><p class="muted">Teste tes idées en HTML, CSS et JavaScript et observe le résultat dans l'aperçu.</p><button class="primary" onclick="ouvrirCoursAcademy('html')">Ouvrir l'atelier →</button></section>`,"academy");
+}
+function ouvrirCoursAcademy(id){
+ const cours=academyCours.find(c=>c.id===id);if(!cours)return;academyCoursActif=id;
+ const ex=academyExemples[id];
+ afficherContenu(`<div class="content-head"><h2>${cours.icone} ${cours.nom}</h2><button onclick="afficherAcademy()">← Tous les cours</button></div>
+ <section class="academy-hero"><p class="eyebrow">PARCOURS ${cours.niveau.toUpperCase()}</p><h2>${cours.nom} : les bases</h2><p class="muted">${cours.desc}</p><div class="academy-progress"><span style="width:${academyCoursTermines(id)/cours.lecons.length*100}%"></span></div><strong>${academyCoursTermines(id)}/${cours.lecons.length} leçons terminées</strong></section>
+ <div class="academy-layout" style="margin-top:18px"><section class="academy-lesson"><h3>📚 Tes leçons</h3>${cours.lecons.map((l,i)=>{const key=id+"-"+i,done=academyLecons.includes(key);return `<article class="panel" style="margin-top:12px"><p class="eyebrow">LEÇON ${i+1}</p><h3>${l[0]} ${done?"✅":""}</h3><p class="muted">${l[1]}</p><button ${done?"disabled":""} class="${done?"":"primary"}" onclick="terminerLeconAcademy('${id}',${i})">${done?"Leçon terminée":"Valider la leçon · +15 XP"}</button></article>`}).join("")}</section>
+ <section class="academy-editor"><h3>💻 Atelier pratique</h3><p class="muted">${cours.objectif}</p><div class="academy-note">Modifie le code, puis clique sur « Exécuter » pour voir le résultat. L'aperçu est isolé du reste du site.</div>
+ <label for="academyHtml">HTML</label><textarea id="academyHtml" spellcheck="false">${academyEchapper(ex.html)}</textarea>
+ <label for="academyCss">CSS</label><textarea id="academyCss" spellcheck="false">${academyEchapper(ex.css)}</textarea>
+ <label for="academyJs">JavaScript</label><textarea id="academyJs" spellcheck="false">${academyEchapper(ex.js)}</textarea>
+ <button class="primary" onclick="executerAcademy()">▶ Exécuter mon code</button><button onclick="reinitialiserAcademy()">Réinitialiser</button><iframe id="academyPreview" class="academy-preview" title="Aperçu de ton code" sandbox="allow-scripts"></iframe>
+ ${["python","csharp","sql"].includes(id)?'<div class="academy-note">Pour Python, C# et SQL, les exemples sont des supports de cours : leur exécution nécessite un environnement adapté. NEXUS te guide dans l’apprentissage, sans prétendre les exécuter dans le navigateur.</div>':""}</section></div>`,"academy");
+ if(["html","css","javascript"].includes(id))executerAcademy();
+}
+function executerAcademy(){
+ const h=document.getElementById("academyHtml"),c=document.getElementById("academyCss"),j=document.getElementById("academyJs"),f=document.getElementById("academyPreview");if(!h||!c||!j||!f)return;
+ const doc='<!doctype html><html><head><meta charset="utf-8"><style>'+c.value+'</style></head><body>'+h.value+'<script>try{'+j.value+'}catch(e){document.body.insertAdjacentHTML("beforeend","<pre style=\\"color:red\\">"+String(e)+"</pre>") }<\/script></body></html>';
+ f.srcdoc=doc;
+}
+function reinitialiserAcademy(){ouvrirCoursAcademy(academyCoursActif)}
+function terminerLeconAcademy(id,index){
+ const key=id+"-"+index;if(academyLecons.includes(key))return;
+ academyLecons.push(key);sauvegarder("nexusAcademyLecons",academyLecons);ajouterXP(15);notifier("🎓 Leçon terminée : +15 XP !");ouvrirCoursAcademy(id);
+}
+
 // Mise à jour des compteurs et des univers avec la nouvelle bibliothèque.
 afficherUnivers();
 actualiserNombreFavoris();
@@ -1547,4 +1611,4 @@ verifierBadges();
 
 </script>
 </body>
-</html>s
+</html>
